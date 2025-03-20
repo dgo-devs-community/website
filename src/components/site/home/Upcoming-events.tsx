@@ -51,7 +51,7 @@ export default async function UpcomingEvents({
               <Button
                 variant="outline"
                 size="sm"
-                className="w-full text-blue-500 border border-blue-500 md:text-base  hover:bg-blue-500 hover:text-white"
+                className="w-full text-blue-500 border border-blue-500 md:text-base cursor-pointer hover:bg-blue-500 hover:text-white"
               >
                 Quiero asistir
               </Button>
