@@ -1,12 +1,6 @@
-import Image from "next/image";
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
 import { getPastEvents } from "@/lib/Events";
 import { ChevronRight } from "lucide-react";
 import PastEventsCard from "../pastevents/PastEventsCard";

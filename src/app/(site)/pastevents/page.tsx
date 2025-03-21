@@ -1,5 +1,4 @@
 import PastEventsCard from "@/components/site/pastevents/PastEventsCard";
-import { Card } from "@/components/ui/card";
 import { getPastEvents } from "@/lib/Events";
 
 export default async function NamePage() {
