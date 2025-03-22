@@ -1,56 +1,71 @@
-import { Facebook, Instagram, Linkedin, Youtube, Twitter, Github, Disc } from "lucide-react"
+import {
+  Facebook,
+  Instagram,
+  Linkedin,
+  Youtube,
+  Twitter,
+  Github,
+  Disc,
+} from "lucide-react";
 
 // Tipos para las redes sociales
 export interface SocialLink {
-  name: string
-  url: string
-  icon: typeof Facebook | typeof Instagram | typeof Linkedin | typeof Youtube | typeof Twitter | typeof Github | typeof Disc
+  name: string;
+  url: string;
+  icon:
+    | typeof Facebook
+    | typeof Instagram
+    | typeof Linkedin
+    | typeof Youtube
+    | typeof Twitter
+    | typeof Github
+    | typeof Disc;
 }
 
 // Tipos para los miembros
 export interface Member {
-  id: number
-  name: string
-  role: string
-  bio: string
-  image: string
+  id: number;
+  name: string;
+  role: string;
+  bio: string;
+  image: string;
   socialLinks?: {
-    linkedin?: string
-    github?: string
-    twitter?: string
-  }
+    linkedin?: string;
+    github?: string;
+    twitter?: string;
+  };
 }
 
 // Información del sitio
 export const siteConfig = {
-  name: "Tech Community Durango",
-  description: "La más grande comunidad Tech en Durango",
-  url: "https://techcommunitydurango.com",
+  name: "DgoTecHub Community",
+  description: "La comunidad Tech líder y más grande de Durango.",
+  url: "https://www.dgotechub.com",
   logo: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/DTH%20-%20logo.svg%202-g7zdpDDy2yl5N36QtZfsPa4Hnfmtit.png",
-  email: "contacto@techcommunitydurango.com",
-  phone: "+52 618 123 4567",
+  email: "Envianos un DM en Instagram!",
+  phone: "",
   address: "Durango, México",
 
   // Redes sociales
   socialLinks: [
     {
       name: "LinkedIn",
-      url: "https://linkedin.com/company/tech-community-durango",
+      url: "https://www.linkedin.com/company/dgotechub-community",
       icon: Linkedin,
     },
     {
       name: "YouTube",
-      url: "https://youtube.com/c/techcommunitydurango",
+      url: "/",
       icon: Youtube,
     },
     {
       name: "Facebook",
-      url: "https://facebook.com/techcommunitydurango",
+      url: "https://www.facebook.com/dgotechub",
       icon: Facebook,
     },
     {
       name: "Instagram",
-      url: "https://instagram.com/techcommunitydurango",
+      url: "https://www.instagram.com/dgotechub",
       icon: Instagram,
     },
     {
@@ -60,7 +75,7 @@ export const siteConfig = {
     },
     {
       name: "GitHub",
-      url: "https://github.com/tech-community-durango",
+      url: "https://github.com/dgo-devs-community",
       icon: Github,
     },
   ] as SocialLink[],
@@ -142,17 +157,20 @@ export const siteConfig = {
     },
     {
       title: "Aprendizaje Práctico",
-      description: "Fomentamos el desarrollo de habilidades a través de proyectos reales y colaborativos.",
+      description:
+        "Fomentamos el desarrollo de habilidades a través de proyectos reales y colaborativos.",
       icon: "Code",
     },
     {
       title: "Innovación Constante",
-      description: "Exploramos nuevas tecnologías y metodologías para mantenernos a la vanguardia.",
+      description:
+        "Exploramos nuevas tecnologías y metodologías para mantenernos a la vanguardia.",
       icon: "Lightbulb",
     },
     {
       title: "Networking Efectivo",
-      description: "Conectamos profesionales y entusiastas para crear oportunidades de colaboración y crecimiento.",
+      description:
+        "Conectamos profesionales y entusiastas para crear oportunidades de colaboración y crecimiento.",
       icon: "Share2",
     },
     {
@@ -163,9 +181,9 @@ export const siteConfig = {
     },
     {
       title: "Ambiente Relajado",
-      description: "Creemos que el aprendizaje y la colaboración florecen en un entorno amigable y sin presiones.",
+      description:
+        "Creemos que el aprendizaje y la colaboración florecen en un entorno amigable y sin presiones.",
       icon: "Coffee",
     },
   ],
-}
-
+};
