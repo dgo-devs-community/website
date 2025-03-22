@@ -53,7 +53,9 @@ export default async function UpcomingEvents({
                 size="sm"
                 className="w-full text-blue-500 border border-blue-500 md:text-base cursor-pointer hover:bg-blue-500 hover:text-white"
               >
-                Quiero asistir
+                <Link target="_blank" href="https://discord.gg/G4RsQJwuP8">
+                  Quiero asistir
+                </Link>
               </Button>
             </CardFooter>
           </Card>
