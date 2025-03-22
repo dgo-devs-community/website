@@ -33,9 +33,20 @@ export default function PastEventsCard({
         <p className="text-gray-600 text-sm">{description}</p>
       </div>
       <div className="w-full flex justify-center mb-5">
-        <Button asChild variant="outline" className="w-11/12 text-blue-500 border border-blue-500 md:text-base  hover:bg-blue-500 hover:text-white">
-            {slug ? <Link href={`/pastevents/${slug}`}>Ver Galería</Link> : <Link target="_blank" href="https://discord.gg/G4RsQJwuP8">Quiero asistir</Link>}
-            
+        <Button
+          asChild
+          variant="outline"
+          className="w-11/12 text-blue-500 border border-blue-500 md:text-base  hover:bg-blue-500 hover:text-white"
+        >
+          {slug ? (
+            <Link href={`/pastevents/${slug}`}>Ver Galería</Link>
+          ) : (
+            <Link target="_blank" href="https://discord.gg/G4RsQJwuP8">
+              <Link target="_blank" href="https://discord.gg/G4RsQJwuP8">
+                Quiero asistir
+              </Link>
+            </Link>
+          )}
         </Button>
       </div>
     </div>
