@@ -66,13 +66,7 @@ const eventsData = {
         "El evento inaugural que dio vida a la comunidad DgoTecHub, donde se forjaron las primeras conexiones.",
       image: "/techmetuup.jpg",
       slug: "tech-meetup-2023",
-      gallery: [
-        "https://placehold.co/600x400",
-        "https://placehold.co/600x400",
-        "https://placehold.co/600x400",
-        "https://placehold.co/600x400",
-        "https://placehold.co/600x400",
-      ],
+      gallery: [],
     },
     {
       id: 3,
@@ -105,11 +99,7 @@ const eventsData = {
         "Un evento de charlas rápidas que inspiró a muchos a compartir sus conocimientos y experiencias.",
       image: "/conference.jpg",
       slug: "charla-desarrollo-web-moderno",
-      gallery: [
-        "https://placehold.co/600x400",
-        "https://placehold.co/600x400",
-        "https://placehold.co/600x400",
-      ],
+      gallery: [],
     },
     {
       id: 5,
