@@ -41,7 +41,7 @@ export const siteConfig = {
   name: "DgoTecHub Community",
   description: "La comunidad Tech líder y más grande de Durango.",
   url: "https://www.dgotechub.com",
-  logo: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/DTH%20-%20logo.svg%202-g7zdpDDy2yl5N36QtZfsPa4Hnfmtit.png",
+  logo: "/logo.webp",
   email: "Envianos un DM en Instagram!",
   phone: "",
   address: "Durango, México",
@@ -129,23 +129,6 @@ export const siteConfig = {
     },
   ] as Member[],
 
-  // Miembros de la comunidad (ejemplos)
-  communityMembers: {
-    professionals: {
-      description:
-        "Desarrolladores, diseñadores, project managers y especialistas en marketing digital que comparten su experiencia y conocimientos con la comunidad.",
-      extendedDescription:
-        "Nuestros miembros profesionales trabajan en empresas locales e internacionales, aportando diversidad de perspectivas y experiencias.",
-      image: "/placeholder.svg?height=200&width=350",
-    },
-    students: {
-      description:
-        "Jóvenes apasionados por la tecnología que buscan complementar su formación académica con experiencias prácticas y mentorías.",
-      extendedDescription:
-        "Los estudiantes encuentran en nuestra comunidad un espacio para desarrollar proyectos, practicar habilidades y conectar con el mundo profesional.",
-      image: "/placeholder.svg?height=200&width=350",
-    },
-  },
 
   // Valores de la comunidad
   communityValues: [
