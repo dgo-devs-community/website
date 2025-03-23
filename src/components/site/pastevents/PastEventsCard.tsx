@@ -42,9 +42,7 @@ export default function PastEventsCard({
             <Link href={`/pastevents/${slug}`}>Ver Galería</Link>
           ) : (
             <Link target="_blank" href="https://discord.gg/G4RsQJwuP8">
-              <Link target="_blank" href="https://discord.gg/G4RsQJwuP8">
-                Quiero asistir
-              </Link>
+              Quiero asistir
             </Link>
           )}
         </Button>
