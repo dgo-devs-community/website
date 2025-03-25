@@ -42,7 +42,7 @@ export const siteConfig = {
   description: "La comunidad Tech líder y más grande de Durango.",
   url: "https://www.dgotechub.com",
   logo: "/logo.webp",
-  email: "Envianos un DM en Instagram!",
+  email: "¡Envíanos un DM en Instagram!",
   phone: "",
   address: "Durango, México",
 
