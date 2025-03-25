@@ -18,7 +18,7 @@ const Mural: React.FC = () => {
         for (const file in gistFiles) {
           const fileContent = gistFiles[file].content.split("\n"); // Dividir el contenido en líneas
           // Unir las líneas a partir de la segunda línea (índice 1)
-          content += fileContent.slice(0).join("\n") + "\n\n";
+          content += fileContent.join("\n") + "\n\n";
         }
 
         setGistContent(content);
@@ -33,13 +33,24 @@ const Mural: React.FC = () => {
 
   return (
     <div
-      style={{ padding: "20px", backgroundColor: "#214386", color: "#ffffff" }}
+      style={{
+        padding: "20px",
+        backgroundColor: "#214386",
+        color: "#ffffff",
+        maxWidth: "800px",
+        margin: "0 auto",
+      }}
     >
       <pre
         style={{
           backgroundColor: "#0e3448",
           padding: "10px",
           borderRadius: "5px",
+          overflowX: "auto", // Permitir desplazamiento horizontal
+          whiteSpace: "pre", // Mantener el formato original
+          fontFamily: "monospace", // Usar fuente monoespaciada
+          fontSize: "14px", // Ajustar tamaño de fuente si es necesario
+          maxHeight: "80vh", // Limitar la altura máxima
         }}
       >
         {gistContent}
