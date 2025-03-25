@@ -81,7 +81,19 @@ export default function Footer() {
           <div>
             <h3 className="font-semibold text-lg mb-4">Contacto</h3>
             <ul className="space-y-2">
-              <li className="text-sm text-white/80">{siteConfig.email}</li>
+              <li>
+                <Link
+                  href={
+                    siteConfig.socialLinks.find((social) => social.name === "Instagram")
+                      ?.url
+                  }
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-white/80 hover:text-white"
+                >
+                  {siteConfig.email}
+                </Link>
+              </li>
               <li className="text-sm text-white/80">{siteConfig.phone}</li>
               <li className="text-sm text-white/80">{siteConfig.address}</li>
             </ul>
