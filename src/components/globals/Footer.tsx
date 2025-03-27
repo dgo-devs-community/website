@@ -84,8 +84,9 @@ export default function Footer() {
               <li>
                 <Link
                   href={
-                    siteConfig.socialLinks.find((social) => social.name === "Instagram")
-                      ?.url
+                    siteConfig.socialLinks.find(
+                      (social) => social.name === "Instagram"
+                    )?.url ?? ""
                   }
                   target="_blank"
                   rel="noopener noreferrer"
