@@ -28,10 +28,10 @@ const eventsData = {
     },
     {
       id: 2,
-      title: "Lighting Talks",
+      title: "Lightning Talks v3.0",
       image: "/techmetuup.jpg",
-      location: "Pendiente",
-      date: "Fecha por confirmar",
+      location: "Boscoffee. Independencia #334",
+      date: "30 de Abril, 2025",
       description:
         "Ideas rápidas, impacto inmediato. Únete a nuestras charlas tecnológicas.",
     },
