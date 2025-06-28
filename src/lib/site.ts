@@ -6,7 +6,10 @@ import {
   Twitter,
   Github,
   Disc,
+  Users,
+  Phone
 } from "lucide-react";
+
 
 // Tipos para las redes sociales
 export interface SocialLink {
@@ -19,7 +22,9 @@ export interface SocialLink {
     | typeof Youtube
     | typeof Twitter
     | typeof Github
-    | typeof Disc;
+    | typeof Disc
+    | typeof Users
+    | typeof Phone;
 }
 
 // Tipos para los miembros
@@ -54,7 +59,7 @@ export const siteConfig = {
       icon: Linkedin,
     },
     {
-      name: "YouTube",
+      name: "Youtube",
       url: "/",
       icon: Youtube,
     },
@@ -77,6 +82,16 @@ export const siteConfig = {
       name: "GitHub",
       url: "https://github.com/dgo-devs-community",
       icon: Github,
+    },
+    {
+      name: "Discord",
+      url: "https://discord.gg/Hj7r2h3m",
+      icon: Users,
+    },
+    {
+      name: "Whatsapp",
+      url: "https://whatsapp.com/channel/0029Vb6VZubJuyAFsKgdch2U",
+      icon: Phone,
     },
   ] as SocialLink[],
 
