@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { siteConfig } from "@/lib/site";
+import { Instagram, Phone, Users } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -11,7 +12,7 @@ export default function Footer() {
             Mantente en contacto.
           </h2>
           <div className="flex space-x-6 justify-center">
-            {siteConfig.socialLinks.slice(0, 4).map((social) => (
+            {siteConfig.socialLinks.filter((social) => ["GitHub", "Facebook", "Twitter"].includes(social.name)).map((social) => (
               <Link
                 key={social.name}
                 href={social.url}
@@ -82,6 +83,7 @@ export default function Footer() {
             <h3 className="font-semibold text-lg mb-4">Contacto</h3>
             <ul className="space-y-2">
               <li>
+                 <div className="flex flex-col space-y-2">
                 <Link
                   href={
                     siteConfig.socialLinks.find(
@@ -90,10 +92,38 @@ export default function Footer() {
                   }
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-white/80 hover:text-white"
+                  className="text-sm text-white/80 hover:text-white flex items-center gap-2"
                 >
+                  <Instagram className="h-4 w-4" />
                   {siteConfig.email}
                 </Link>
+                <Link
+                  href={
+                    siteConfig.socialLinks.find(
+                      (social) => social.name === "Discord"
+                    )?.url ?? ""
+                  }
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-white/80 hover:text-white flex items-center gap-2"
+                >
+                  <Users className="w-4 h-4" />
+                   ¡Únete a nuestra comunidad en Discord!
+                </Link>
+                  <Link
+                  href={
+                    siteConfig.socialLinks.find(
+                      (social) => social.name === "Whatsapp"
+                    )?.url ?? ""
+                  }
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-white/80 hover:text-white flex items-center gap-2"
+                >
+                  <Phone className="w-4 h-4" />
+                   ¡Únete a nuestro canal de WhatsApp!
+                </Link>
+                </div>
               </li>
               <li className="text-sm text-white/80">{siteConfig.phone}</li>
               <li className="text-sm text-white/80">{siteConfig.address}</li>
