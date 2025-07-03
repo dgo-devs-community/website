@@ -109,7 +109,7 @@ export function downloadTicketImage(imageDataUrl: string, ticketCode: string) {
 /**
  * Compartir boleto en redes sociales
  */
-export function shareTicket(_ticket: Ticket) {
+export function shareTicket() {
   const shareText = `¡Conseguí mi boleto para ${partyConfig.name}! 🎉\n${partyConfig.date} - ${partyConfig.time}\n${partyConfig.location}`;
 
   // Detectar si es móvil para usar Web Share API
