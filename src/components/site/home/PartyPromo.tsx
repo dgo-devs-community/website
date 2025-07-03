@@ -13,7 +13,8 @@ export default function PartyPromo() {
             {partyConfig.name}
           </h2>
           <p className="text-xl text-blue-100 mb-6">
-            ¡La fiesta tech más esperada del año!
+            La fiesta tech más esperada del año... ¡con DJ en vivo y música
+            norteña pa’ que se armae el bailongo! 🪗🎧
           </p>
           <div className="flex flex-wrap justify-center gap-6 text-white">
             <div className="flex items-center gap-2">
@@ -35,10 +36,10 @@ export default function PartyPromo() {
           {/* Información del evento */}
           <Card className="p-6 bg-white/10 backdrop-blur-md border-white/20 text-white">
             <Users className="h-12 w-12 mb-4 text-blue-300" />
-            <h3 className="text-xl font-bold mb-2">Networking</h3>
+            <h3 className="text-xl font-bold mb-2">Ambiente Inigualable</h3>
             <p className="text-blue-100">
-              Conecta con desarrolladores, emprendedores y especialistas en
-              tecnología
+              Conecta con desarrolladores, emprendedores y compas de la tech… ¡y
+              échate un zapateado con el DJ y el norteño en vivo!
             </p>
           </Card>
 
@@ -50,7 +51,8 @@ export default function PartyPromo() {
               ${partyConfig.price} {partyConfig.currency}
             </div>
             <p className="text-blue-100">
-              Incluye acceso completo al evento y networking
+              Incluye acceso completo a la fiesta, networking tech y ambiente
+              musical bien prendido.
             </p>
           </Card>
 
@@ -62,7 +64,7 @@ export default function PartyPromo() {
               <li>1. Realiza transferencia</li>
               <li>2. Sube comprobante</li>
               <li>3. Recibe tu boleto</li>
-              <li>4. ¡Disfruta el evento!</li>
+              <li>4. ¡Y vente a la pachanga tech!</li>
             </ul>
           </Card>
         </div>
@@ -77,7 +79,7 @@ export default function PartyPromo() {
             </Button>
           </Link>
           <p className="text-blue-100 mt-4">
-            Boletos limitados • Generación instantánea • Pago optimista
+            Cupo limitado • Generación instantánea • Pago por transferencia
           </p>
         </div>
 

@@ -2,9 +2,9 @@ import { PartyConfig } from "@/types/tickets";
 
 export const partyConfig: PartyConfig = {
   name: "DgoTecHub Fest 2025",
-  date: "15 de Agosto, 2025",
+  date: "16 de Agosto, 2025",
   time: "20:00 hrs",
-  location: "Centro de Eventos TechHub, Durango",
+  location: "Centro de Eventos DgoTechHub, Durango",
   price: 200,
   currency: "MXN",
   logo: "/logo.webp",
