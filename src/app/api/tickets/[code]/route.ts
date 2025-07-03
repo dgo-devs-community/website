@@ -3,17 +3,18 @@ import { supabaseAdmin } from "@/lib/supabase";
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { code: string } }
+  { params }: { params: Promise<{ code: string }> }
 ) {
   try {
     const { action } = await request.json();
+    const { code } = await params;
 
     if (action === "use") {
       // Marcar boleto como usado
       const { data, error } = await supabaseAdmin
         .from("tickets")
         .update({ status: "used" })
-        .eq("code", params.code.toUpperCase())
+        .eq("code", code.toUpperCase())
         .eq("status", "paid")
         .select()
         .single();

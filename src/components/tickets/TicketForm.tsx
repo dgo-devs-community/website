@@ -120,7 +120,7 @@ export default function TicketForm() {
 
   const handleShare = () => {
     if (ticket) {
-      const shareUrls = shareTicket(ticket);
+      const shareUrls = shareTicket();
       if (shareUrls) {
         // Mostrar opciones de compartir
         const shareText = `¡Conseguí mi boleto para ${partyConfig.name}! 🎉`;
