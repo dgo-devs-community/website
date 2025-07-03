@@ -1,14 +1,17 @@
-
 import Community from "@/components/site/home/Community";
 import Events from "@/components/site/home/Events";
 import Hero from "@/components/site/home/Hero";
 import PastEvents from "@/components/site/home/Past-Events";
 import UpcomingEvents from "@/components/site/home/Upcoming-events";
+import PartyPromo from "@/components/site/home/PartyPromo";
 
 export default function Home() {
   return (
     <>
       <Hero />
+
+      {/* Promocional de la fiesta */}
+      <PartyPromo />
 
       <div className="md:max-w-6xl md:mx-auto md:grid md:grid-cols-12 md:gap-8 md:py-12 md:px-0">
         {/* Left Column on Desktop / Main Column on Mobile */}

@@ -17,6 +17,10 @@ export default function Navbar() {
       path: "/events",
       text: "Eventos",
     },
+    {
+      path: "/tickets",
+      text: "Boletos",
+    },
   ];
 
   return (
@@ -24,13 +28,13 @@ export default function Navbar() {
       <div className="md:max-w-6xl mx-auto px-4 md:px-0 py-2 flex justify-between items-center">
         <div className="flex items-center">
           <Link href={"/"}>
-          <Image
-            src="/logo.webp"
-            alt="Logo"
-            width={70}
-            height={70}
-            className="mr-2"
-          />
+            <Image
+              src="/logo.webp"
+              alt="Logo"
+              width={70}
+              height={70}
+              className="mr-2"
+            />
           </Link>
         </div>
         <nav className="flex space-x-6 md:space-x-8">
