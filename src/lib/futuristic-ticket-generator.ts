@@ -8,7 +8,7 @@ const generateFuturisticTicketImage = async (
   try {
     // Configurar opciones para html2canvas-pro
     const canvas = await html2canvas(ticketElement, {
-      // backgroundColor: "#000000",
+      backgroundColor: "transparent",
       // scale: 2, // Mayor resolución
       // useCORS: true,
       // allowTaint: true,

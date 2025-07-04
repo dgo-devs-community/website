@@ -4,87 +4,12 @@ import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { getAllTickets } from "@/lib/ticket-service";
 import {
-  Music,
-  Users,
-  Sparkles,
-  Trophy,
-  PartyPopper,
-  Volume2,
-} from "lucide-react";
-
-interface EventGoal {
-  id: string;
-  name: string;
-  description: string;
-  targetTickets: number;
-  icon: React.ReactNode;
-  color: string;
-  bgColor: string;
-  celebration: string;
-}
-
-const eventGoals: EventGoal[] = [
-  {
-    id: "norteño",
-    name: "¡Hora de Norteño!",
-    description: "Conjunto norteño confirmado",
-    targetTickets: 50,
-    icon: <Music className="h-6 w-6" />,
-    color: "text-green-600",
-    bgColor: "bg-green-100",
-    celebration: "🎵 ¡Ya tenemos norteño asegurado! 🎵",
-  },
-  {
-    id: "dj",
-    name: "DJ Set Completo",
-    description: "DJ profesional toda la noche",
-    targetTickets: 100,
-    icon: <Volume2 className="h-6 w-6" />,
-    color: "text-blue-600",
-    bgColor: "bg-blue-100",
-    celebration: "🎧 ¡DJ confirmado para toda la noche! 🎧",
-  },
-  {
-    id: "banda",
-    name: "Banda en Vivo",
-    description: "Banda local de rock/pop",
-    targetTickets: 150,
-    icon: <Users className="h-6 w-6" />,
-    color: "text-purple-600",
-    bgColor: "bg-purple-100",
-    celebration: "🎸 ¡Banda en vivo confirmada! 🎸",
-  },
-  {
-    id: "surpresa",
-    name: "Sorpresa Especial",
-    description: "Artista invitado sorpresa",
-    targetTickets: 200,
-    icon: <Sparkles className="h-6 w-6" />,
-    color: "text-pink-600",
-    bgColor: "bg-pink-100",
-    celebration: "✨ ¡Sorpresa especial desbloqueada! ✨",
-  },
-  {
-    id: "premium",
-    name: "Experiencia Premium",
-    description: "Barra premium y decoración extra",
-    targetTickets: 250,
-    icon: <Trophy className="h-6 w-6" />,
-    color: "text-yellow-600",
-    bgColor: "bg-yellow-100",
-    celebration: "🏆 ¡Experiencia premium activada! 🏆",
-  },
-  {
-    id: "legendary",
-    name: "Fiesta Legendaria",
-    description: "¡Todo desbloqueado!",
-    targetTickets: 300,
-    icon: <PartyPopper className="h-6 w-6" />,
-    color: "text-red-600",
-    bgColor: "bg-red-100",
-    celebration: "🎉 ¡FIESTA LEGENDARIA DESBLOQUEADA! 🎉",
-  },
-];
+  eventGoals,
+  renderGoalIcon,
+  getGoalProgress,
+  isGoalCompleted,
+  getTicketsRemaining,
+} from "@/lib/event-goals";
 
 export default function EventProgressMeter() {
   const [ticketsSold, setTicketsSold] = useState(0);
@@ -108,9 +33,9 @@ export default function EventProgressMeter() {
 
       setTicketsSold(totalTickets);
 
-      // Determinar qué metas se han completado
+      // Determinar qué metas se han completado usando la nueva función
       const completed = eventGoals
-        .filter((goal) => totalTickets >= goal.targetTickets)
+        .filter((goal) => isGoalCompleted(goal, totalTickets))
         .map((goal) => goal.id);
 
       setCompletedGoals(completed);
@@ -119,10 +44,6 @@ export default function EventProgressMeter() {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const getProgressPercentage = (targetTickets: number) => {
-    return Math.min((ticketsSold / targetTickets) * 100, 100);
   };
 
   const getProgressColor = (percentage: number) => {
@@ -147,14 +68,15 @@ export default function EventProgressMeter() {
           ¡Desbloqueemos la Fiesta Juntos!
         </h2>
         <p className="text-lg text-gray-600">
-          {ticketsSold} boletos vendidos - ¡Sigamos creciendo!
+          {ticketsSold} personas asistirán - ¡Sigamos creciendo!
         </p>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {eventGoals.map((goal) => {
-          const progress = getProgressPercentage(goal.targetTickets);
-          const isCompleted = completedGoals.includes(goal.id);
+          const progress = getGoalProgress(goal, ticketsSold);
+          const isCompleted = isGoalCompleted(goal, ticketsSold);
+          const ticketsRemaining = getTicketsRemaining(goal, ticketsSold);
 
           return (
             <Card
@@ -165,15 +87,14 @@ export default function EventProgressMeter() {
             >
               <div className="flex items-center justify-between mb-4">
                 <div className={`p-3 rounded-full ${goal.bgColor}`}>
-                  <div className={goal.color}>{goal.icon}</div>
+                  <div className={goal.color}>{renderGoalIcon(goal, "md")}</div>
                 </div>
                 <div className="text-right">
                   <p className="text-sm text-gray-500">
-                    {ticketsSold} / {goal.targetTickets}
+                    {Math.max(ticketsSold, goal.startTickets)} /{" "}
+                    {goal.targetTickets}
                   </p>
-                  <p className="text-lg font-bold text-gray-900">
-                    {Math.round(progress)}%
-                  </p>
+                  <p className="text-lg font-bold text-gray-900">{progress}%</p>
                 </div>
               </div>
 
@@ -200,10 +121,15 @@ export default function EventProgressMeter() {
                   </div>
                 )}
 
-                {!isCompleted && (
+                {!isCompleted && ticketsSold < goal.startTickets && (
                   <p className="text-xs text-gray-500 text-center">
-                    {goal.targetTickets - ticketsSold} boletos más para
-                    desbloquear
+                    Disponible cuando llegues a {goal.startTickets} boletos
+                  </p>
+                )}
+
+                {!isCompleted && ticketsSold >= goal.startTickets && (
+                  <p className="text-xs text-gray-500 text-center">
+                    {ticketsRemaining} boletos más para desbloquear
                   </p>
                 )}
               </div>

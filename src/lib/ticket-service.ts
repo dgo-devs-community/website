@@ -65,6 +65,46 @@ async function generateUniqueCode(): Promise<string> {
 }
 
 /**
+ * Enviar notificación de nuevo boleto por email
+ */
+async function sendTicketNotification(ticket: Ticket): Promise<void> {
+  try {
+    const response = await fetch("/api/send-email", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        to: "dgotechub@gmail.com",
+        subject: `🎫 Nuevo boleto generado - ${ticket.code}`,
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <h2 style="color: #2563eb;">🎫 Nuevo Boleto Generado</h2>
+            <div style="background-color: #f3f4f6; padding: 20px; border-radius: 8px; margin: 20px 0;">
+              <p><strong>Código:</strong> ${ticket.code}</p>
+              <p><strong>Nombre:</strong> ${ticket.name}</p>
+              <p><strong>Email:</strong> ${ticket.email}</p>
+              <p><strong>Cantidad:</strong> ${ticket.quantity}</p>
+              <p><strong>Estado:</strong> ${ticket.status}</p>
+              <p><strong>Fecha:</strong> ${new Date(ticket.created_at).toLocaleString()}</p>
+              ${ticket.receipt_url ? `<p><strong>Comprobante:</strong> <a href="${ticket.receipt_url}" target="_blank">Ver comprobante</a></p>` : ""}
+            </div>
+            <p>Revisa la transferencia y cambia el estado del boleto en el panel de administración.</p>
+          </div>
+        `,
+      }),
+    });
+
+    if (!response.ok) {
+      console.error("Error sending email notification");
+    }
+  } catch (error) {
+    console.error("Error sending ticket notification:", error);
+    // No queremos que el error de email rompa la creación del ticket
+  }
+}
+
+/**
  * Crear un nuevo boleto en la base de datos
  */
 export async function createTicket(formData: TicketFormData): Promise<Ticket> {
@@ -79,7 +119,7 @@ export async function createTicket(formData: TicketFormData): Promise<Ticket> {
         name: formData.name,
         email: formData.email,
         quantity: formData.quantity,
-        status: "pending",
+        status: "pending", // SIEMPRE pending hasta revisión manual
         code: uniqueCode,
       })
       .select()
@@ -96,16 +136,16 @@ export async function createTicket(formData: TicketFormData): Promise<Ticket> {
 
     let receiptUrl = "";
 
-    // Si hay comprobante, subirlo
+    // Si hay comprobante, subirlo PERO mantener estado pending
     if (formData.receipt) {
       receiptUrl = await uploadReceipt(formData.receipt, ticketData.code);
 
-      // Actualizar el boleto con la URL del comprobante y marcar como pagado
+      // Actualizar el boleto con la URL del comprobante PERO mantener pending
       const { error: updateError } = await supabase
         .from("tickets")
         .update({
           receipt_url: receiptUrl,
-          status: "paid",
+          // NO cambiar status aquí - se mantiene pending
         })
         .eq("id", ticketData.id);
 
@@ -114,11 +154,16 @@ export async function createTicket(formData: TicketFormData): Promise<Ticket> {
       }
     }
 
-    return {
+    const finalTicket = {
       ...ticketData,
       receipt_url: receiptUrl,
-      status: formData.receipt ? "paid" : "pending",
+      status: "pending", // SIEMPRE pending
     };
+
+    // Enviar notificación por email (sin bloquear si falla)
+    sendTicketNotification(finalTicket).catch(console.error);
+
+    return finalTicket;
   } catch (error) {
     console.error("Error in createTicket:", error);
     throw error;
@@ -176,4 +221,33 @@ export async function getAllTickets(): Promise<Ticket[]> {
   }
 
   return data || [];
+}
+
+/**
+ * Actualizar el estado de un boleto (para administración)
+ */
+export async function updateTicketStatus(
+  id: string,
+  status: "pending" | "paid" | "used" | "cancelled"
+): Promise<Ticket> {
+  try {
+    const response = await fetch("/api/tickets/update-status", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id, status }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || "Error al actualizar boleto");
+    }
+
+    const result = await response.json();
+    return result.data;
+  } catch (error) {
+    console.error("Error updating ticket status:", error);
+    throw error;
+  }
 }

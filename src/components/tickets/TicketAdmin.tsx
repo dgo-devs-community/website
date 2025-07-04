@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { getAllTickets } from "@/lib/ticket-service";
+import { getAllTickets, updateTicketStatus } from "@/lib/ticket-service";
 import { Ticket } from "@/types/tickets";
 import {
   Users,
@@ -12,14 +12,17 @@ import {
   Clock,
   Ban,
   Download,
+  Check,
+  X,
 } from "lucide-react";
 
 export default function TicketAdmin() {
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [filter, setFilter] = useState<"all" | "paid" | "used" | "pending">(
-    "all"
-  );
+  const [updatingTicket, setUpdatingTicket] = useState<string | null>(null);
+  const [filter, setFilter] = useState<
+    "all" | "paid" | "used" | "pending" | "cancelled"
+  >("all");
 
   useEffect(() => {
     loadTickets();
@@ -46,6 +49,7 @@ export default function TicketAdmin() {
     paid: tickets.filter((t) => t.status === "paid").length,
     used: tickets.filter((t) => t.status === "used").length,
     pending: tickets.filter((t) => t.status === "pending").length,
+    cancelled: tickets.filter((t) => t.status === "cancelled").length,
     totalRevenue: tickets
       .filter((t) => t.status === "paid" || t.status === "used")
       .reduce((sum, t) => sum + t.quantity * 150, 0),
@@ -88,6 +92,32 @@ export default function TicketAdmin() {
     link.click();
   };
 
+  const handleStatusChange = async (
+    ticketId: string,
+    newStatus: "pending" | "paid" | "used" | "cancelled"
+  ) => {
+    if (!confirm(`¿Estás seguro de cambiar el estado a "${newStatus}"?`)) {
+      return;
+    }
+
+    setUpdatingTicket(ticketId);
+    try {
+      await updateTicketStatus(ticketId, newStatus);
+      // Recargar los boletos para mostrar el cambio
+      await loadTickets();
+      alert(`Estado actualizado exitosamente a: ${newStatus}`);
+    } catch (error) {
+      console.error("Error updating ticket:", error);
+      alert(
+        `Error al actualizar boleto: ${
+          error instanceof Error ? error.message : "Error desconocido"
+        }`
+      );
+    } finally {
+      setUpdatingTicket(null);
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -104,7 +134,7 @@ export default function TicketAdmin() {
       </div>
 
       {/* Estadísticas */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
         <Card className="p-4">
           <div className="flex items-center justify-between">
             <div>
@@ -112,6 +142,18 @@ export default function TicketAdmin() {
               <p className="text-2xl font-bold">{stats.total}</p>
             </div>
             <Users className="h-8 w-8 text-blue-500" />
+          </div>
+        </Card>
+
+        <Card className="p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600">Pendientes</p>
+              <p className="text-2xl font-bold text-yellow-600">
+                {stats.pending}
+              </p>
+            </div>
+            <Clock className="h-8 w-8 text-yellow-500" />
           </div>
         </Card>
 
@@ -138,12 +180,60 @@ export default function TicketAdmin() {
         <Card className="p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Ingresos</p>
-              <p className="text-2xl font-bold text-green-600">
-                ${stats.totalRevenue}
+              <p className="text-sm font-medium text-gray-600">Cancelados</p>
+              <p className="text-2xl font-bold text-red-600">
+                {stats.cancelled}
               </p>
             </div>
-            <div className="text-sm text-gray-500">MXN</div>
+            <Ban className="h-8 w-8 text-red-500" />
+          </div>
+        </Card>
+      </div>
+
+      {/* Estadísticas financieras */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <Card className="p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600">
+                Ingresos Totales
+              </p>
+              <p className="text-2xl font-bold text-green-600">
+                ${stats.totalRevenue.toLocaleString()}
+              </p>
+              <p className="text-xs text-gray-500">MXN</p>
+            </div>
+            <div className="text-green-500 text-2xl">💰</div>
+          </div>
+        </Card>
+
+        <Card className="p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600">
+                Personas Confirmadas
+              </p>
+              <p className="text-2xl font-bold text-blue-600">
+                {tickets
+                  .filter((t) => t.status === "paid" || t.status === "used")
+                  .reduce((sum, t) => sum + t.quantity, 0)}
+              </p>
+              <p className="text-xs text-gray-500">Asistentes</p>
+            </div>
+            <div className="text-blue-500 text-2xl">👥</div>
+          </div>
+        </Card>
+
+        <Card className="p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600">
+                Precio Promedio
+              </p>
+              <p className="text-2xl font-bold text-purple-600">$150</p>
+              <p className="text-xs text-gray-500">MXN por boleto</p>
+            </div>
+            <div className="text-purple-500 text-2xl">🎫</div>
           </div>
         </Card>
       </div>
@@ -178,6 +268,13 @@ export default function TicketAdmin() {
             size="sm"
           >
             Pendientes ({stats.pending})
+          </Button>
+          <Button
+            variant={filter === "cancelled" ? "default" : "outline"}
+            onClick={() => setFilter("cancelled")}
+            size="sm"
+          >
+            Cancelados ({stats.cancelled})
           </Button>
         </div>
 
@@ -227,16 +324,121 @@ export default function TicketAdmin() {
                     })}
                   </td>
                   <td className="p-4">
-                    {ticket.receipt_url && (
-                      <a
-                        href={ticket.receipt_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600 hover:text-blue-800 text-sm"
-                      >
-                        Ver comprobante
-                      </a>
-                    )}
+                    <div className="space-y-2">
+                      {ticket.receipt_url && (
+                        <a
+                          href={ticket.receipt_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:text-blue-800 text-sm block"
+                        >
+                          📎 Ver comprobante
+                        </a>
+                      )}
+
+                      <div className="flex flex-wrap gap-1">
+                        {/* Mostrar botones según el estado actual */}
+                        {ticket.status === "pending" && (
+                          <>
+                            <Button
+                              onClick={() =>
+                                handleStatusChange(ticket.id, "paid")
+                              }
+                              variant="outline"
+                              size="sm"
+                              disabled={updatingTicket === ticket.id}
+                              className="text-green-600 border-green-300 hover:bg-green-50"
+                            >
+                              {updatingTicket === ticket.id ? (
+                                <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-green-500"></div>
+                              ) : (
+                                <>
+                                  <Check className="h-3 w-3 mr-1" />
+                                  Aprobar
+                                </>
+                              )}
+                            </Button>
+                            <Button
+                              onClick={() =>
+                                handleStatusChange(ticket.id, "cancelled")
+                              }
+                              variant="outline"
+                              size="sm"
+                              disabled={updatingTicket === ticket.id}
+                              className="text-red-600 border-red-300 hover:bg-red-50"
+                            >
+                              {updatingTicket === ticket.id ? (
+                                <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-red-500"></div>
+                              ) : (
+                                <>
+                                  <X className="h-3 w-3 mr-1" />
+                                  Rechazar
+                                </>
+                              )}
+                            </Button>
+                          </>
+                        )}
+
+                        {ticket.status === "paid" && (
+                          <>
+                            <Button
+                              onClick={() =>
+                                handleStatusChange(ticket.id, "used")
+                              }
+                              variant="outline"
+                              size="sm"
+                              disabled={updatingTicket === ticket.id}
+                              className="text-blue-600 border-blue-300 hover:bg-blue-50"
+                            >
+                              {updatingTicket === ticket.id ? (
+                                <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-blue-500"></div>
+                              ) : (
+                                "Marcar usado"
+                              )}
+                            </Button>
+                            <Button
+                              onClick={() =>
+                                handleStatusChange(ticket.id, "pending")
+                              }
+                              variant="outline"
+                              size="sm"
+                              disabled={updatingTicket === ticket.id}
+                              className="text-yellow-600 border-yellow-300 hover:bg-yellow-50"
+                            >
+                              Revertir a pendiente
+                            </Button>
+                          </>
+                        )}
+
+                        {ticket.status === "used" && (
+                          <Button
+                            onClick={() =>
+                              handleStatusChange(ticket.id, "paid")
+                            }
+                            variant="outline"
+                            size="sm"
+                            disabled={updatingTicket === ticket.id}
+                            className="text-green-600 border-green-300 hover:bg-green-50"
+                          >
+                            Reactivar boleto
+                          </Button>
+                        )}
+
+                        {ticket.status === "cancelled" && (
+                          <Button
+                            onClick={() =>
+                              handleStatusChange(ticket.id, "pending")
+                            }
+                            variant="outline"
+                            size="sm"
+                            disabled={updatingTicket === ticket.id}
+                            className="text-blue-600 border-blue-300 hover:bg-blue-50"
+                          >
+                            Reactivar
+                          </Button>
+                        )}
+                      </div>
+                    </div>
                   </td>
                 </tr>
               ))}

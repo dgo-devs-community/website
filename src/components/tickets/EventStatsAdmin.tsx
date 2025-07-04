@@ -34,8 +34,8 @@ export default function EventStatsAdmin() {
 
   useEffect(() => {
     loadStats();
-    // Actualizar cada 30 segundos
-    const interval = setInterval(loadStats, 30000);
+    // Actualizar cada 5 minutos
+    const interval = setInterval(loadStats, 5 * 60 * 1000);
     return () => clearInterval(interval);
   }, []);
 

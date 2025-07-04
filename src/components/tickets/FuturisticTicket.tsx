@@ -13,9 +13,9 @@ interface FuturisticTicketProps {
 }
 
 const FuturisticTicket = forwardRef<HTMLDivElement, FuturisticTicketProps>(
-  ({ ticket, showQR = true }, ref) => {
+  ({ ticket }, ref) => {
     const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>("");
-
+    const showQR = true;
     useEffect(() => {
       if (showQR && ticket.code) {
         QRCode.toDataURL(ticket.code, {
@@ -34,7 +34,20 @@ const FuturisticTicket = forwardRef<HTMLDivElement, FuturisticTicketProps>(
     return (
       <div
         ref={ref}
-        className="relative w-[360px] h-[640px] bg-black rounded-3xl overflow-hidden shadow-2xl shadow-cyan-500/20 border border-cyan-800/50 flex flex-col font-sans ticket-container"
+        style={{
+          padding: "1rem",
+          position: "relative",
+          width: "360px",
+          height: "640px",
+          backgroundColor: "#000000",
+          borderRadius: "24px",
+          overflow: "hidden",
+          boxShadow: "0 25px 50px -12px rgba(6, 182, 212, 0.2)",
+          border: "1px solid rgba(15, 118, 110, 0.5)",
+          display: "flex",
+          flexDirection: "column",
+          fontFamily: "sans-serif",
+        }}
       >
         {/* Background Aurora/Nebula Effect */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
@@ -55,44 +68,100 @@ const FuturisticTicket = forwardRef<HTMLDivElement, FuturisticTicketProps>(
         </div>
 
         {/* Main content with padding */}
-        <div className="relative z-10 flex flex-col h-full p-6">
-          <header className="text-center pb-4 border-b-2 border-dashed border-cyan-400/30">
-            <h1
-              className="font-bold text-4xl tracking-wider text-white mb-2"
-              style={{
-                textShadow: "0 0 10px #fff, 0 0 20px #00ffff, 0 0 30px #00ffff",
-                fontFamily: "monospace",
-              }}
-            >
-              {partyConfig.name}
-            </h1>
-            <p className="text-cyan-300 text-lg tracking-widest">
-              TECH • NORTEÑO • DJ
-            </p>
-          </header>
-
-          <section className="flex-grow flex flex-col justify-center items-center text-center my-6 space-y-6">
-            {/* Fecha y Hora en una línea */}
-            <div className="w-full">
-              <p className="text-sm text-cyan-300 tracking-widest mb-2">
-                FECHA Y HORA
-              </p>
-              <div className="flex justify-center items-center space-x-4">
-                <p className="text-xl font-bold text-white">
-                  {partyConfig.date}
-                </p>
-                <span className="text-cyan-300">•</span>
-                <p className="text-xl text-cyan-200">{partyConfig.time}</p>
+        <div
+          style={{
+            position: "relative",
+            zIndex: 10,
+            display: "flex",
+            flexDirection: "column",
+            height: "100%",
+            padding: "1.5rem",
+          }}
+        >
+          <header
+            style={{
+              textAlign: "center",
+              paddingBottom: "1rem",
+              borderBottomWidth: "2px",
+              borderBottomStyle: "dashed",
+              borderBottomColor: "rgba(34, 211, 238, 0.3)",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "0.75rem",
+            }}
+          >
+            {/* Logo container */}
+            <div className="w-20 h-20 bg-gradient-to-br from-cyan-400/20 to-purple-600/20 rounded-full flex items-center justify-center shadow-lg backdrop-blur-sm border border-cyan-400/30">
+              <div className="w-16 h-16 flex items-center justify-center">
+                <Image
+                  src="/Degradado Blanco@2x.png"
+                  alt="Logo"
+                  width={60}
+                  height={60}
+                  className="w-auto h-auto max-w-[60px] max-h-[60px] object-contain"
+                />
               </div>
             </div>
 
-            {/* Nombre del titular - MÁS PROMINENTE */}
+            <div>
+              <h1
+                className="font-bold text-2xl tracking-wider text-white mb-2"
+                style={{
+                  lineHeight: "1",
+                  textShadow:
+                    "0 0 10px #fff, 0 0 20px #00ffff, 0 0 30px #00ffff",
+                  fontFamily: "Geist",
+                }}
+              >
+                {partyConfig.name}
+              </h1>
+              <p className="text-cyan-300 text-sm tracking-widest">
+                TECH • NORTEÑO • DJ
+              </p>
+            </div>
+          </header>
+
+          <section
+            style={{
+              paddingBlock: "0.75rem",
+              marginBlock: "1rem",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              textAlign: "center",
+              gap: "1rem",
+              flex: "1",
+            }}
+          >
+            {/* Date and Time */}
+            <div className="w-full bg-black/20 border border-cyan-500/30 rounded-lg p-3">
+              <div className="flex justify-center items-center space-x-4">
+                <div className="text-center">
+                  <p className="text-xs text-cyan-300/70 tracking-widest mb-1">
+                    FECHA
+                  </p>
+                  <p className="text-lg font-bold text-white">
+                    {partyConfig.date}
+                  </p>
+                </div>
+                <div className="w-px h-8 bg-cyan-500/30"></div>
+                <div className="text-center">
+                  <p className="text-xs text-cyan-300/70 tracking-widest mb-1">
+                    HORA
+                  </p>
+                  <p className="text-lg text-cyan-200">{partyConfig.time}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Guest Name */}
             <div className="w-full">
-              <p className="text-sm text-cyan-300 tracking-widest mb-3">
+              <p className="text-xs text-cyan-300 tracking-widest mb-2">
                 INVITADO ESPECIAL
               </p>
               <p
-                className="text-4xl font-bold text-white mb-2 leading-tight"
+                className="text-3xl font-bold text-white mb-2 leading-tight"
                 style={{
                   textShadow:
                     "0 0 15px #fff, 0 0 25px #00ffff, 0 0 35px #00ffff",
@@ -101,32 +170,42 @@ const FuturisticTicket = forwardRef<HTMLDivElement, FuturisticTicketProps>(
                 {ticket.name}
               </p>
             </div>
-
-            {/* Ticket ID más discreto */}
-            <div className="w-full">
-              <p className="text-xs text-cyan-300/70 tracking-widest mb-1">
-                TICKET ID
-              </p>
-              <p className="text-sm font-mono text-cyan-400/80 bg-black/30 px-3 py-1 rounded border border-cyan-500/30">
-                {ticket.code}
-              </p>
-            </div>
           </section>
 
           {showQR && (
-            <footer className="mt-auto flex flex-col items-center justify-center pt-4 border-t-2 border-dashed border-cyan-400/30">
-              <div className="bg-white/95 p-2 rounded-lg shadow-lg border border-cyan-500/50">
-                {qrCodeDataUrl && (
+            <footer
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                paddingTop: "0.75rem",
+                borderTop: "2px dashed rgba(34, 211, 238, 0.3)",
+              }}
+            >
+              <div
+                style={{
+                  width: "100px",
+                  height: "100px",
+                }}
+                className="bg-white/95 p-2 rounded-lg shadow-lg border border-cyan-500/50"
+              >
+                {qrCodeDataUrl ? (
                   <Image
                     src={qrCodeDataUrl}
                     alt="QR Code"
-                    width={100}
-                    height={100}
-                    className="w-[100px] h-[100px]"
+                    width={80}
+                    height={80}
+                    className="w-[80px] h-[80px]"
                   />
+                ) : (
+                  <div className="w-[80px] h-[80px] bg-gray-300 animate-pulse"></div>
                 )}
               </div>
-              <p className="mt-2 text-xs text-cyan-300 tracking-wider">
+              <p
+                style={{ marginTop: "0.5rem" }}
+                className="text-xs text-cyan-300 tracking-wider"
+              >
                 ESCANEAR EN LA ENTRADA
               </p>
             </footer>

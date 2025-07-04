@@ -8,10 +8,7 @@ import { createTicket } from "@/lib/ticket-service";
 import { shareTicket } from "@/lib/ticket-generator";
 import { TicketFormData, Ticket } from "@/types/tickets";
 import FuturisticTicket from "./FuturisticTicket";
-import {
-  downloadFuturisticTicket,
-  downloadFuturisticTicketFallback,
-} from "@/lib/futuristic-ticket-generator";
+import { downloadFuturisticTicket } from "@/lib/futuristic-ticket-generator";
 import {
   Upload,
   Download,
@@ -208,12 +205,39 @@ export default function TicketForm() {
             <h2 className="text-2xl font-bold text-green-400 mb-2">
               ¡Boleto Generado Exitosamente!
             </h2>
-            <p className="text-gray-300">
+            <p className="text-gray-300 mb-4">
               Tu código de boleto es:{" "}
               <span className="font-mono font-bold text-xl text-cyan-400">
                 {ticket.code}
               </span>
             </p>
+
+            {/* Mensaje de estado pendiente */}
+            <div className="bg-yellow-900/30 border border-yellow-500/50 rounded-lg p-4 mb-6">
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <AlertCircle className="h-5 w-5 text-yellow-500" />
+                <h3 className="font-semibold text-yellow-400">
+                  Estado: Pendiente de Verificación
+                </h3>
+              </div>
+              <div className="text-sm text-yellow-100 space-y-2">
+                <p>
+                  📋 <strong>Tu boleto está en revisión.</strong> Hemos
+                  notificado a nuestro equipo sobre tu compra.
+                </p>
+                <p>
+                  🔍 <strong>Verificaremos tu transferencia</strong> y
+                  cambiaremos el estado a &quot;Pagado&quot; una vez confirmada.
+                </p>
+                <p>
+                  📧 <strong>Te notificaremos por email</strong> cuando tu
+                  boleto sea aprobado.
+                </p>
+                <p>
+                  ⏱️ <strong>Tiempo estimado:</strong> 24-48 horas laborales.
+                </p>
+              </div>
+            </div>
           </div>
 
           <div className="mb-6 flex justify-center">
@@ -256,7 +280,13 @@ export default function TicketForm() {
                 • Guarda tu código de boleto:{" "}
                 <span className="font-mono text-cyan-400">{ticket.code}</span>
               </li>
-              <li>• Presenta este boleto en el evento</li>
+              <li>
+                • <strong>Estado actual:</strong> Pendiente de verificación
+              </li>
+              <li>
+                • Solo boletos con estado &quot;Pagado&quot; son válidos para el
+                evento
+              </li>
               <li>• El QR code será escaneado en la entrada</li>
               <li>• En caso de problemas, contacta al organizador</li>
             </ul>
