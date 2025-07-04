@@ -3,7 +3,8 @@ import { Ticket } from "@/types/tickets";
 import { partyConfig } from "@/lib/party-config";
 
 /**
- * Generar imagen de boleto como canvas
+ * Generar imagen de boleto como canvas (LEGACY - Ahora se usa FuturisticTicket)
+ * @deprecated Usa downloadFuturisticTicket desde futuristic-ticket-generator.ts
  */
 export async function generateTicketImage(ticket: Ticket): Promise<string> {
   return new Promise((resolve, reject) => {

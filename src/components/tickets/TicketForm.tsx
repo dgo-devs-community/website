@@ -5,12 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { partyConfig, bankInfo } from "@/lib/party-config";
 import { createTicket } from "@/lib/ticket-service";
-import {
-  generateTicketImage,
-  downloadTicketImage,
-  shareTicket,
-} from "@/lib/ticket-generator";
+import { shareTicket } from "@/lib/ticket-generator";
 import { TicketFormData, Ticket } from "@/types/tickets";
+import FuturisticTicket from "./FuturisticTicket";
+import {
+  downloadFuturisticTicket,
+  downloadFuturisticTicketFallback,
+} from "@/lib/futuristic-ticket-generator";
 import {
   Upload,
   Download,
@@ -28,7 +29,6 @@ export default function TicketForm() {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [ticket, setTicket] = useState<Ticket | null>(null);
-  const [ticketImage, setTicketImage] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -97,10 +97,7 @@ export default function TicketForm() {
       // Crear boleto
       const newTicket = await createTicket(formData);
       setTicket(newTicket);
-
-      // Generar imagen del boleto
-      const imageUrl = await generateTicketImage(newTicket);
-      setTicketImage(imageUrl);
+      // Ya no necesitamos generar imagen aquí, se hará cuando se descargue
     } catch (error) {
       console.error("Error al crear boleto:", error);
       setErrors({
@@ -112,9 +109,62 @@ export default function TicketForm() {
     }
   };
 
-  const handleDownload = () => {
-    if (ticketImage && ticket) {
-      downloadTicketImage(ticketImage, ticket.code);
+  const handleDownload = async () => {
+    if (ticket) {
+      const ticketElement = document.getElementById(
+        `futuristic-ticket-${ticket.code}`
+      );
+      if (ticketElement) {
+        let loadingMessage: HTMLDivElement | null = null;
+
+        try {
+          console.log("Iniciando descarga del boleto...");
+
+          // Mostrar mensaje de carga
+          loadingMessage = document.createElement("div");
+          loadingMessage.innerHTML = `
+            <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+                        background: rgba(0,0,0,0.8); color: white; padding: 20px; 
+                        border-radius: 10px; z-index: 10000;">
+              <div style="text-align: center;">
+                <div style="border: 3px solid #22d3ee; border-top: 3px solid transparent; 
+                           border-radius: 50%; width: 30px; height: 30px; 
+                           animation: spin 1s linear infinite; margin: 0 auto 10px;"></div>
+                <p>Generando boleto...</p>
+              </div>
+            </div>
+            <style>
+              @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+            </style>
+          `;
+          document.body.appendChild(loadingMessage);
+
+          await downloadFuturisticTicket(ticketElement, ticket);
+
+          // Remover mensaje de carga
+          if (loadingMessage && document.body.contains(loadingMessage)) {
+            document.body.removeChild(loadingMessage);
+          }
+
+          console.log("Descarga completada exitosamente");
+        } catch (error) {
+          console.error("Error al descargar boleto:", error);
+
+          // Remover mensaje de carga
+          if (loadingMessage && document.body.contains(loadingMessage)) {
+            document.body.removeChild(loadingMessage);
+          }
+
+          const errorMessage =
+            error instanceof Error ? error.message : "Error desconocido";
+          alert(`Error al descargar el boleto: ${errorMessage}`);
+        }
+      } else {
+        console.error("No se encontró el elemento del boleto");
+        alert(
+          "No se encontró el boleto para descargar. Por favor recarga la página."
+        );
+      }
     }
   };
 
@@ -143,41 +193,39 @@ export default function TicketForm() {
       receipt: null,
     });
     setTicket(null);
-    setTicketImage(null);
     setErrors({});
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
   };
 
-  if (ticket && ticketImage) {
+  if (ticket) {
     return (
-      <div className="max-w-2xl mx-auto p-6">
-        <Card className="p-6">
+      <div className="max-w-4xl mx-auto p-6">
+        <Card className="p-6 bg-gradient-to-br from-gray-900 to-black">
           <div className="text-center mb-6">
             <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-green-700 mb-2">
+            <h2 className="text-2xl font-bold text-green-400 mb-2">
               ¡Boleto Generado Exitosamente!
             </h2>
-            <p className="text-gray-600">
+            <p className="text-gray-300">
               Tu código de boleto es:{" "}
-              <span className="font-mono font-bold text-xl">{ticket.code}</span>
+              <span className="font-mono font-bold text-xl text-cyan-400">
+                {ticket.code}
+              </span>
             </p>
           </div>
 
-          <div className="mb-6">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={ticketImage}
-              alt="Boleto generado"
-              className="w-full max-w-md mx-auto rounded-lg shadow-lg"
-            />
+          <div className="mb-6 flex justify-center">
+            <div id={`futuristic-ticket-${ticket.code}`}>
+              <FuturisticTicket ticket={ticket} showQR={true} />
+            </div>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
               onClick={handleDownload}
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 bg-cyan-600 hover:bg-cyan-700 text-white"
             >
               <Download className="h-4 w-4" />
               Descargar Boleto
@@ -185,20 +233,29 @@ export default function TicketForm() {
             <Button
               onClick={handleShare}
               variant="outline"
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 border-cyan-500 text-cyan-400 hover:bg-cyan-50 hover:text-cyan-600"
             >
               <Share2 className="h-4 w-4" />
               Compartir
             </Button>
-            <Button onClick={resetForm} variant="outline">
+            <Button
+              onClick={resetForm}
+              variant="outline"
+              className="border-gray-500 text-gray-400 hover:bg-gray-50 hover:text-gray-600"
+            >
               Generar Otro Boleto
             </Button>
           </div>
 
-          <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-            <h3 className="font-semibold mb-2">Información importante:</h3>
-            <ul className="text-sm text-gray-700 space-y-1">
-              <li>• Guarda tu código de boleto: {ticket.code}</li>
+          <div className="mt-6 p-4 bg-gray-800 rounded-lg border border-cyan-500/30">
+            <h3 className="font-semibold mb-2 text-cyan-300">
+              Información importante:
+            </h3>
+            <ul className="text-sm text-gray-300 space-y-1">
+              <li>
+                • Guarda tu código de boleto:{" "}
+                <span className="font-mono text-cyan-400">{ticket.code}</span>
+              </li>
               <li>• Presenta este boleto en el evento</li>
               <li>• El QR code será escaneado en la entrada</li>
               <li>• En caso de problemas, contacta al organizador</li>

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import TicketAdmin from "@/components/tickets/TicketAdmin";
+import EventStatsAdmin from "@/components/tickets/EventStatsAdmin";
 
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -58,7 +59,22 @@ export default function AdminPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-12">
-      <TicketAdmin />
+      <div className="max-w-6xl mx-auto p-6">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            Panel Administrativo
+          </h1>
+          <p className="text-gray-600">
+            Gestión de boletos y estadísticas del evento
+          </p>
+        </div>
+
+        {/* Estadísticas del evento */}
+        <EventStatsAdmin />
+
+        {/* Administración de boletos */}
+        <TicketAdmin />
+      </div>
     </div>
   );
 }

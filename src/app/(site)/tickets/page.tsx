@@ -1,4 +1,5 @@
 import TicketForm from "@/components/tickets/TicketForm";
+import EventProgressMeterCompact from "@/components/site/EventProgressMeterCompact";
 
 export default function TicketsPage() {
   return (
@@ -11,6 +12,11 @@ export default function TicketsPage() {
           <p className="text-xl text-gray-600">
             Obtén tu boleto de forma rápida y sencilla
           </p>
+        </div>
+
+        {/* Medidor de progreso compacto */}
+        <div className="max-w-4xl mx-auto mb-8">
+          <EventProgressMeterCompact />
         </div>
 
         <TicketForm />

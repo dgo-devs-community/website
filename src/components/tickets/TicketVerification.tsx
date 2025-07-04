@@ -9,6 +9,7 @@ import {
 } from "@/lib/ticket-service";
 import { partyConfig } from "@/lib/party-config";
 import { Ticket } from "@/types/tickets";
+import FuturisticTicket from "./FuturisticTicket";
 import {
   Search,
   CheckCircle,
@@ -180,6 +181,13 @@ export default function TicketVerification() {
               {ticket.status === "pending" && (
                 <p className="text-sm">Este boleto está pendiente de pago</p>
               )}
+            </div>
+
+            {/* Previsualización del boleto */}
+            <div className="flex justify-center py-4">
+              <div className="transform scale-75 md:scale-90">
+                <FuturisticTicket ticket={ticket} showQR={true} />
+              </div>
             </div>
 
             {/* Información del evento */}
