@@ -138,7 +138,7 @@ export async function getUpcomingEvents(limit?: number) {
 
 export async function getPastEvents(limit?: number) {
   const data = await getEvents();
-  return limit ? data.pastEvents.slice(0, limit) : data.pastEvents;
+  return limit ? data.pastEvents.slice(-limit).reverse() : data.pastEvents;
 }
 
 export async function getPastEventBySlug(slug: string) {
