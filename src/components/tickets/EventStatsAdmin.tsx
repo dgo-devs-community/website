@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { getAllTickets } from "@/lib/ticket-service";
 import { TrendingUp, Target, Users, DollarSign, Share2 } from "lucide-react";
+import { shouldShowTicketGoals } from "@/lib/feature-flags";
 
 interface TicketStats {
   totalTickets: number;
@@ -54,13 +55,19 @@ export default function EventStatsAdmin() {
         0
       );
 
-      // Calcular metas completadas
-      const completedGoals = eventGoals.filter(
-        (goal) => totalTickets >= goal.target
-      ).length;
+      let completedGoals = 0;
+      let nextGoal = null;
 
-      // Encontrar próxima meta
-      const nextGoal = eventGoals.find((goal) => totalTickets < goal.target);
+      // Only calculate goals if feature is enabled
+      if (shouldShowTicketGoals()) {
+        // Calcular metas completadas
+        completedGoals = eventGoals.filter(
+          (goal) => totalTickets >= goal.target
+        ).length;
+
+        // Encontrar próxima meta
+        nextGoal = eventGoals.find((goal) => totalTickets < goal.target);
+      }
 
       // Calcular tasa de crecimiento (simulada por ahora)
       const growthRate = Math.random() * 10 + 5; // 5-15% simulado
@@ -99,18 +106,24 @@ export default function EventStatsAdmin() {
   const generateShareableMessage = () => {
     if (!stats) return "";
 
-    const completedText =
-      stats.completedGoals > 0
-        ? `¡Ya desbloqueamos ${stats.completedGoals} sorpresas! 🎉`
-        : "¡Ayúdanos a desbloquear las primeras sorpresas! 🎯";
+    let message = `🔥 DgoTecHub Fest 2025 🔥\n\n📊 ${stats.totalTickets} boletos vendidos\n`;
 
-    return `🔥 DgoTecHub Fest 2025 🔥\n\n📊 ${
-      stats.totalTickets
-    } boletos vendidos\n${completedText}\n\n${
-      stats.nextGoal
-        ? `🎯 Próxima meta: ${stats.nextGoal.name} (${stats.nextGoal.remaining} boletos más)`
-        : "¡Todas las metas desbloqueadas!"
-    }\n\n¡No te quedes sin el tuyo! 🎫`;
+    // Only include goals information if feature is enabled
+    if (shouldShowTicketGoals()) {
+      const completedText =
+        stats.completedGoals > 0
+          ? `¡Ya desbloqueamos ${stats.completedGoals} sorpresas! 🎉`
+          : "¡Ayúdanos a desbloquear las primeras sorpresas! 🎯";
+
+      message += `${completedText}\n\n${
+        stats.nextGoal
+          ? `🎯 Próxima meta: ${stats.nextGoal.name} (${stats.nextGoal.remaining} boletos más)`
+          : "¡Todas las metas desbloqueadas!"
+      }\n\n`;
+    }
+
+    message += "¡No te quedes sin el tuyo! 🎫";
+    return message;
   };
 
   if (isLoading) {
@@ -157,43 +170,47 @@ export default function EventStatsAdmin() {
         </div>
       </Card>
 
-      {/* Metas completadas */}
-      <Card className="p-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm text-gray-600">Metas Completadas</p>
-            <p className="text-2xl font-bold text-gray-900">
-              {stats.completedGoals}/{eventGoals.length}
-            </p>
-          </div>
-          <div className="p-3 bg-purple-100 rounded-full">
-            <Target className="h-6 w-6 text-purple-600" />
-          </div>
-        </div>
-      </Card>
-
-      {/* Próxima meta */}
-      <Card className="p-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm text-gray-600">Próxima Meta</p>
-            <p className="text-lg font-bold text-gray-900">
-              {stats.nextGoal ? stats.nextGoal.name : "¡Completado!"}
-            </p>
-            {stats.nextGoal && (
-              <p className="text-sm text-gray-500">
-                {stats.nextGoal.remaining} boletos más
+      {/* Metas completadas - only show if feature is enabled */}
+      {shouldShowTicketGoals() && (
+        <Card className="p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-600">Metas Completadas</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {stats.completedGoals}/{eventGoals.length}
               </p>
-            )}
+            </div>
+            <div className="p-3 bg-purple-100 rounded-full">
+              <Target className="h-6 w-6 text-purple-600" />
+            </div>
           </div>
-          <div className="p-3 bg-yellow-100 rounded-full">
-            <TrendingUp className="h-6 w-6 text-yellow-600" />
-          </div>
-        </div>
-      </Card>
+        </Card>
+      )}
 
-      {/* Progreso de la próxima meta */}
-      {stats.nextGoal && (
+      {/* Próxima meta - only show if feature is enabled */}
+      {shouldShowTicketGoals() && (
+        <Card className="p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-600">Próxima Meta</p>
+              <p className="text-lg font-bold text-gray-900">
+                {stats.nextGoal ? stats.nextGoal.name : "¡Completado!"}
+              </p>
+              {stats.nextGoal && (
+                <p className="text-sm text-gray-500">
+                  {stats.nextGoal.remaining} boletos más
+                </p>
+              )}
+            </div>
+            <div className="p-3 bg-yellow-100 rounded-full">
+              <TrendingUp className="h-6 w-6 text-yellow-600" />
+            </div>
+          </div>
+        </Card>
+      )}
+
+      {/* Progreso de la próxima meta - only show if feature is enabled */}
+      {shouldShowTicketGoals() && stats.nextGoal && (
         <Card className="p-4 md:col-span-2">
           <div className="flex items-center justify-between mb-2">
             <h3 className="text-lg font-semibold text-gray-900">

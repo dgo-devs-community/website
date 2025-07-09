@@ -5,6 +5,10 @@ import { Card } from "@/components/ui/card";
 import { getAllTickets } from "@/lib/ticket-service";
 import { Ticket } from "@/types/tickets";
 import { Clock, User, CheckCircle, Sparkles } from "lucide-react";
+import {
+  shouldShowTicketGoals,
+  shouldShowPartyInfo,
+} from "@/lib/feature-flags";
 
 interface ActivityItem {
   id: string;
@@ -28,8 +32,18 @@ export default function LiveActivityFeed() {
   const [currentTickets, setCurrentTickets] = useState(0);
   const [lastTicketCount, setLastTicketCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [, setShowComponent] = useState(false);
 
   useEffect(() => {
+    // Check if we should show the component based on feature flags
+    const shouldShow = shouldShowPartyInfo();
+    setShowComponent(shouldShow);
+
+    if (!shouldShow) {
+      setIsLoading(false);
+      return;
+    }
+
     const loadData = async () => {
       try {
         const tickets = await getAllTickets();
@@ -79,23 +93,25 @@ export default function LiveActivityFeed() {
 
           setActivities((prev) => [newActivity, ...prev.slice(0, 9)]);
 
-          // Check for goal achievements
-          const achievedGoals = eventGoals.filter(
-            (goal) =>
-              lastTicketCount < goal.target && totalTickets >= goal.target
-          );
+          // Check for goal achievements only if ticket goals feature is enabled
+          if (shouldShowTicketGoals()) {
+            const achievedGoals = eventGoals.filter(
+              (goal) =>
+                lastTicketCount < goal.target && totalTickets >= goal.target
+            );
 
-          achievedGoals.forEach((goal) => {
-            const goalActivity: ActivityItem = {
-              id: `goal-${goal.target}-${Date.now()}`,
-              type: "goal_achieved",
-              message: `${goal.emoji} ${goal.name} ¡DESBLOQUEADO!`,
-              timestamp: new Date(),
-              highlight: true,
-            };
+            achievedGoals.forEach((goal) => {
+              const goalActivity: ActivityItem = {
+                id: `goal-${goal.target}-${Date.now()}`,
+                type: "goal_achieved",
+                message: `${goal.emoji} ${goal.name} ¡DESBLOQUEADO!`,
+                timestamp: new Date(),
+                highlight: true,
+              };
 
-            setActivities((prev) => [goalActivity, ...prev.slice(0, 9)]);
-          });
+              setActivities((prev) => [goalActivity, ...prev.slice(0, 9)]);
+            });
+          }
 
           setLastTicketCount(totalTickets);
         }
@@ -134,24 +150,26 @@ export default function LiveActivityFeed() {
       });
     });
 
-    // Add milestone messages
-    const totalTickets = tickets.reduce(
-      (sum, ticket) => sum + ticket.quantity,
-      0
-    );
-    const achievedGoals = eventGoals.filter(
-      (goal) => totalTickets >= goal.target
-    );
+    // Add milestone messages only if ticket goals feature is enabled
+    if (shouldShowTicketGoals()) {
+      const totalTickets = tickets.reduce(
+        (sum, ticket) => sum + ticket.quantity,
+        0
+      );
+      const achievedGoals = eventGoals.filter(
+        (goal) => totalTickets >= goal.target
+      );
 
-    achievedGoals.forEach((goal) => {
-      activities.push({
-        id: `milestone-${goal.target}`,
-        type: "goal_achieved",
-        message: `${goal.emoji} ${goal.name} ¡DESBLOQUEADO!`,
-        timestamp: new Date(Date.now() - Math.random() * 86400000), // Random time in last 24h
-        highlight: false,
+      achievedGoals.forEach((goal) => {
+        activities.push({
+          id: `milestone-${goal.target}`,
+          type: "goal_achieved",
+          message: `${goal.emoji} ${goal.name} ¡DESBLOQUEADO!`,
+          timestamp: new Date(Date.now() - Math.random() * 86400000), // Random time in last 24h
+          highlight: false,
+        });
       });
-    });
+    }
 
     return activities
       .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())

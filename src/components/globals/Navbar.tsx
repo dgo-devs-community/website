@@ -2,6 +2,7 @@ import Image from "next/image";
 import React from "react";
 import NavLink from "./NavLink";
 import Link from "next/link";
+import { shouldShowPartyInfo } from "@/lib/feature-flags";
 
 export default function Navbar() {
   const navItems = [
@@ -17,10 +18,15 @@ export default function Navbar() {
       path: "/events",
       text: "Eventos",
     },
-    {
-      path: "/tickets",
-      text: "Boletos",
-    },
+    // Only show tickets link if party info is enabled
+    ...(shouldShowPartyInfo()
+      ? [
+          {
+            path: "/tickets",
+            text: "Boletos",
+          },
+        ]
+      : []),
   ];
 
   return (

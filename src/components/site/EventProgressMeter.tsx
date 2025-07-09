@@ -10,14 +10,24 @@ import {
   isGoalCompleted,
   getTicketsRemaining,
 } from "@/lib/event-goals";
+import { shouldShowTicketGoals, shouldShowPartyInfo } from "@/lib/feature-flags";
 
 export default function EventProgressMeter() {
   const [ticketsSold, setTicketsSold] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [completedGoals, setCompletedGoals] = useState<string[]>([]);
+  const [showComponent, setShowComponent] = useState(false);
 
   useEffect(() => {
-    loadTicketStats();
+    // Check if we should show the component based on feature flags
+    const shouldShow = shouldShowTicketGoals() && shouldShowPartyInfo();
+    setShowComponent(shouldShow);
+    
+    if (shouldShow) {
+      loadTicketStats();
+    } else {
+      setIsLoading(false);
+    }
   }, []);
 
   const loadTicketStats = async () => {
@@ -59,6 +69,11 @@ export default function EventProgressMeter() {
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
       </div>
     );
+  }
+  
+  // Don't render the component if feature flags indicate it should be hidden
+  if (!showComponent) {
+    return null;
   }
 
   return (

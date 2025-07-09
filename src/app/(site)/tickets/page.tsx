@@ -1,5 +1,6 @@
 import TicketForm from "@/components/tickets/TicketForm";
 import EventProgressMeterCompact from "@/components/site/EventProgressMeterCompact";
+import { shouldShowTicketGoals, shouldShowPartyInfo } from "@/lib/feature-flags";
 
 export default function TicketsPage() {
   return (
@@ -14,10 +15,12 @@ export default function TicketsPage() {
           </p>
         </div>
 
-        {/* Medidor de progreso compacto */}
-        <div className="max-w-4xl mx-auto mb-8">
-          <EventProgressMeterCompact />
-        </div>
+        {/* Medidor de progreso compacto - solo se muestra si las feature flags lo permiten */}
+        {shouldShowTicketGoals() && shouldShowPartyInfo() && (
+          <div className="max-w-4xl mx-auto mb-8">
+            <EventProgressMeterCompact />
+          </div>
+        )}
 
         <TicketForm />
       </div>

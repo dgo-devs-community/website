@@ -3,8 +3,14 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { partyConfig } from "@/lib/party-config";
 import { Ticket, Calendar, Users, CheckCircle } from "lucide-react";
+import { shouldShowPartyInfo } from "@/lib/feature-flags";
 
 export default function PartyPromo() {
+  // Don't render the component if party info should be hidden
+  if (!shouldShowPartyInfo()) {
+    return null;
+  }
+  
   return (
     <section className="py-16 bg-gradient-to-br from-blue-900 via-purple-900 to-blue-800">
       <div className="max-w-6xl mx-auto px-4">
