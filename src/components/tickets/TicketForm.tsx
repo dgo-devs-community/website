@@ -42,8 +42,8 @@ export default function TicketForm() {
       newErrors.email = "El correo no es válido";
     }
 
-    if (formData.quantity < 1 || formData.quantity > 10) {
-      newErrors.quantity = "La cantidad debe ser entre 1 y 10";
+    if (formData.quantity < 1 || formData.quantity > 1) {
+      newErrors.quantity = "Solo se permite un boleto por vez";
     }
 
     if (!formData.receipt) {
@@ -288,7 +288,7 @@ export default function TicketForm() {
                 evento
               </li>
               <li>• El QR code será escaneado en la entrada</li>
-              <li>• En caso de problemas, contacta al organizador</li>
+              <li>• En caso de problemas, contacta a @dvran en discord</li>
             </ul>
           </div>
         </Card>
@@ -374,32 +374,6 @@ export default function TicketForm() {
           </div>
 
           <div>
-            <label
-              htmlFor="quantity"
-              className="block text-sm font-medium mb-1"
-            >
-              Cantidad de boletos *
-            </label>
-            <select
-              id="quantity"
-              value={formData.quantity}
-              onChange={(e) =>
-                setFormData({ ...formData, quantity: parseInt(e.target.value) })
-              }
-              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
-                <option key={num} value={num}>
-                  {num} boleto{num > 1 ? "s" : ""}
-                </option>
-              ))}
-            </select>
-            {errors.quantity && (
-              <p className="text-red-500 text-sm mt-1">{errors.quantity}</p>
-            )}
-          </div>
-
-          <div>
             <label htmlFor="receipt" className="block text-sm font-medium mb-1">
               Comprobante de pago *
             </label>
@@ -439,8 +413,7 @@ export default function TicketForm() {
 
           <div className="text-center">
             <p className="text-xl font-bold mb-2">
-              Total: ${partyConfig.price * formData.quantity}{" "}
-              {partyConfig.currency}
+              Total: ${partyConfig.price} {partyConfig.currency}
             </p>
           </div>
 

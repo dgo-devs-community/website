@@ -10,7 +10,7 @@ export default function PartyPromo() {
   if (!shouldShowPartyInfo()) {
     return null;
   }
-  
+
   return (
     <section className="py-16 bg-gradient-to-br from-blue-900 via-purple-900 to-blue-800">
       <div className="max-w-6xl mx-auto px-4">
@@ -109,19 +109,20 @@ export default function PartyPromo() {
 
           <Card className="p-6 bg-black/20 backdrop-blur-md border-white/20">
             <h3 className="text-xl font-bold text-white mb-4">
-              Información Bancaria
+              ¿Listo para la fiesta?
             </h3>
-            <div className="text-blue-100 space-y-1 text-sm">
-              <p>
-                <strong>Banco:</strong> Banco Ejemplo
-              </p>
-              <p>
-                <strong>Cuenta:</strong> 1234567890
-              </p>
-              <p>
-                <strong>Concepto:</strong> Boleto Fiesta 2025
-              </p>
-            </div>
+            <p className="text-blue-100 mb-4">
+              Haz clic en &quot;Obtener Mi Boleto&quot; para ir al proceso de
+              compra completo con toda la información necesaria.
+            </p>
+            <Link href="/tickets">
+              <Button
+                variant="outline"
+                className="bg-white/10 text-white border-white/30 hover:bg-white/20"
+              >
+                Ir a Comprar Boleto
+              </Button>
+            </Link>
           </Card>
         </div>
       </div>
