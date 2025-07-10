@@ -43,10 +43,18 @@ export default function Navbar() {
             />
           </Link>
         </div>
-        <nav className="flex space-x-6 md:space-x-8">
+        <nav className="flex space-x-6 md:space-x-8 items-center">
           {navItems.map((item) => (
             <NavLink key={item.path} path={item.path} text={item.text} />
           ))}
+          {shouldShowPartyInfo() && (
+            <Link
+              href="/download-ticket"
+              className="text-xs text-blue-200 hover:text-white transition-colors duration-200 border border-blue-200 hover:border-white px-2 py-1 rounded"
+            >
+              Recuperar Boleto
+            </Link>
+          )}
         </nav>
       </div>
     </header>

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
+import { sendTicketApprovedNotification } from "@/lib/ticket-service";
 
 export async function PATCH(request: NextRequest) {
   try {
@@ -40,33 +41,10 @@ export async function PATCH(request: NextRequest) {
       );
     }
 
-    // Enviar notificación por email al usuario (opcional)
+    // Enviar notificación por email al usuario cuando se aprueba
     if (status === "paid") {
       try {
-        await fetch(`${request.nextUrl.origin}/api/send-email`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            to: data.email,
-            subject: `✅ Tu boleto ${data.code} ha sido aprobado - DgoTecHub Fest`,
-            html: `
-              <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                <h2 style="color: #059669;">✅ ¡Tu boleto ha sido aprobado!</h2>
-                <div style="background-color: #ecfdf5; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #059669;">
-                  <p>¡Hola <strong>${data.name}</strong>!</p>
-                  <p>Tu boleto con código <strong>${data.code}</strong> ha sido verificado y aprobado.</p>
-                  <p><strong>Estado:</strong> Pagado ✅</p>
-                  <p><strong>Cantidad:</strong> ${data.quantity} persona(s)</p>
-                  <p>Ya puedes usar tu boleto para ingresar al evento.</p>
-                </div>
-                <p>¡Nos vemos en DgoTecHub Fest!</p>
-                <p style="color: #6b7280; font-size: 12px;">Si tienes dudas, contáctanos.</p>
-              </div>
-            `,
-          }),
-        });
+        await sendTicketApprovedNotification(data);
       } catch (emailError) {
         console.error("Error sending approval email:", emailError);
         // No fallar la actualización si el email falla
