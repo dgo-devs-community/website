@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useParams } from "next/navigation";
 import { Ticket } from "@/types/tickets";
-import TicketPreview from "@/components/tickets/TicketPreview";
+import FuturisticTicket from "@/components/tickets/FuturisticTicket";
 import { shareFuturisticTicket } from "@/lib/futuristic-ticket-generator";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -181,8 +181,11 @@ export default function DownloadTicketByCodePage() {
           <div className="order-2 lg:order-1">
             <Card className="p-6">
               <h2 className="text-xl font-bold mb-4">Vista Previa</h2>
-              <div id="ticket-preview" className="bg-white rounded-lg">
-                <TicketPreview ticket={ticket} />
+              <div
+                id="ticket-preview"
+                className="bg-white rounded-lg flex justify-center"
+              >
+                <FuturisticTicket ticket={ticket} />
               </div>
             </Card>
           </div>

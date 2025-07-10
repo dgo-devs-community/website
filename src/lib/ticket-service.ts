@@ -69,8 +69,10 @@ async function generateUniqueCode(): Promise<string> {
  */
 async function sendTicketNotification(ticket: Ticket): Promise<void> {
   try {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+
     // Email para el administrador (notificación interna)
-    const adminResponse = await fetch("/api/send-email", {
+    const adminResponse = await fetch(`${baseUrl}/api/send-email`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -101,9 +103,9 @@ async function sendTicketNotification(ticket: Ticket): Promise<void> {
     }
 
     // Email para el usuario con información del boleto y link de descarga
-    const downloadUrl = `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/download-ticket/${ticket.code}`;
+    const downloadUrl = `${baseUrl}/download-ticket/${ticket.code}`;
 
-    const userResponse = await fetch("/api/send-email", {
+    const userResponse = await fetch(`${baseUrl}/api/send-email`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -155,7 +157,7 @@ async function sendTicketNotification(ticket: Ticket): Promise<void> {
                 <p style="margin: 0 0 10px 0; color: #64748b; font-size: 14px;">
                   ¿Perdiste este email? Puedes recuperar tu boleto en:
                 </p>
-                <a href="${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/download-ticket" 
+                <a href="${baseUrl}/download-ticket" 
                    style="color: #3b82f6; text-decoration: none; font-size: 14px;">
                   Recuperar mi boleto
                 </a>
@@ -189,9 +191,10 @@ export async function sendTicketApprovedNotification(
   ticket: Ticket
 ): Promise<void> {
   try {
-    const downloadUrl = `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/download-ticket/${ticket.code}`;
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+    const downloadUrl = `${baseUrl}/download-ticket/${ticket.code}`;
 
-    const response = await fetch("/api/send-email", {
+    const response = await fetch(`${baseUrl}/api/send-email`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

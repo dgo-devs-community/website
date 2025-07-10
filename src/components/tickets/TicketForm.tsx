@@ -58,16 +58,11 @@ export default function TicketForm() {
     const file = e.target.files?.[0];
     if (file) {
       // Validar tipo de archivo
-      const allowedTypes = [
-        "image/jpeg",
-        "image/png",
-        "image/jpg",
-        "application/pdf",
-      ];
+      const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
       if (!allowedTypes.includes(file.type)) {
         setErrors({
           ...errors,
-          receipt: "Solo se permiten archivos JPG, PNG o PDF",
+          receipt: "Solo se permiten archivos JPG, PNG",
         });
         return;
       }
