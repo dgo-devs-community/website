@@ -3,8 +3,8 @@ import { PartyConfig } from "@/types/tickets";
 export const partyConfig: PartyConfig = {
   name: "DgoTecHub Fest 2025",
   date: "16 Ago 2025",
-  time: "8 PM",
-  location: "Ubicacion por confirmar",
+  time: "6 PM",
+  location: "Preguntar por Discord o DM en Instagram",
   price: 199,
   currency: "MXN",
   logo: "/logo.webp",
