@@ -21,18 +21,19 @@ export default function PastEventsCard({
   date,
 }: PastEventsCardProps) {
   return (
-    <div className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow ">
+    <div className="h-full flex flex-col bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
       <div className="relative h-64">
         <Image src={image || ""} alt={title} fill className="object-cover" />
       </div>
-      <div className="p-4 flex flex-col gap-2">
-        <h3 className="font-bold text-xl">{title}</h3>
-        <p className="text-blue-600 text-sm">
-          {date} - {location}
-        </p>
-        <p className="text-gray-600 text-sm">{description}</p>
-      </div>
-      <div className="w-full flex justify-center mb-5">
+      <div className="p-4 flex-1 flex flex-col">
+        <div className="flex-1">
+          <h3 className="font-bold text-xl mb-2">{title}</h3>
+          <p className="text-blue-600 text-sm mb-2">
+            {date} - {location}
+          </p>
+          <p className="text-gray-600 text-sm">{description}</p>
+        </div>
+        <div className="w-full flex justify-center mt-4 pt-4">
         <Button
           asChild
           variant="outline"
@@ -46,6 +47,7 @@ export default function PastEventsCard({
             </Link>
           )}
         </Button>
+      </div>
       </div>
     </div>
   );
