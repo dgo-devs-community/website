@@ -42,10 +42,7 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  
-
 }
-
 
 :root {
   --radius: 0.625rem;
@@ -63,15 +60,15 @@
   --muted-foreground: oklch(0.556 0 0);
   --accent: oklch(0.94 0 212.83);
   --accent-foreground: oklch(0 0 241);
-  --destructive: oklch(0.50 0.22 0);
+  --destructive: oklch(0.5 0.22 0);
   --border: oklch(0.94 0.05 241);
   --input: oklch(0.94 0.05 241);
   --ring: oklch(0.48 0.18 224.28);
-  --chart-1: oklch(0.40 0.19 225.93);
+  --chart-1: oklch(0.4 0.19 225.93);
   --chart-2: oklch(0.42 0.22 335.06);
   --chart-3: oklch(0.59 0.24 198.44);
   --chart-4: oklch(0.26 0.19 175.34);
-  --chart-5: oklch(0.50 0.20 263.39);
+  --chart-5: oklch(0.5 0.2 263.39);
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);
@@ -122,5 +119,158 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* Futuristic Ticket Styles */
+.ticket-container {
+  perspective: 1000px;
+  animation: ticket-float 6s ease-in-out infinite;
+}
+
+@keyframes ticket-float {
+  0%,
+  100% {
+    transform: translateY(0px) rotateX(0deg);
+  }
+  50% {
+    transform: translateY(-5px) rotateX(1deg);
+  }
+}
+
+.bg-grid-pattern {
+  background-image: linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Holographic effect for ticket corners */
+.ticket-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 70%
+  );
+  z-index: 1;
+  pointer-events: none;
+  animation: hologram-sweep 3s ease-in-out infinite;
+}
+
+@keyframes hologram-sweep {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Neon glow animations */
+@keyframes neon-pulse {
+  0%,
+  100% {
+    text-shadow: 0 0 5px #fff, 0 0 10px #00ffff, 0 0 15px #00ffff,
+      0 0 20px #00ffff;
+  }
+  50% {
+    text-shadow: 0 0 10px #fff, 0 0 20px #00ffff, 0 0 30px #00ffff,
+      0 0 40px #00ffff;
+  }
+}
+
+/* Particle effect overlay */
+.ticket-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+      2px 2px at 20px 30px,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    ),
+    radial-gradient(2px 2px at 40px 70px, rgba(0, 255, 255, 0.3), transparent),
+    radial-gradient(1px 1px at 90px 40px, rgba(255, 255, 255, 0.2), transparent),
+    radial-gradient(1px 1px at 130px 80px, rgba(0, 255, 255, 0.2), transparent);
+  background-size: 150px 150px;
+  animation: particles-float 8s linear infinite;
+  z-index: 2;
+  pointer-events: none;
+}
+
+@keyframes particles-float {
+  0% {
+    transform: translateY(0px);
+  }
+  100% {
+    transform: translateY(-150px);
+  }
+}
+
+/* Cyber border effect */
+.cyber-border {
+  position: relative;
+  overflow: hidden;
+}
+
+.cyber-border::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 255, 255, 0.4),
+    transparent
+  );
+  animation: cyber-scan 2s linear infinite;
+}
+
+@keyframes cyber-scan {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* Glitch effect for special elements */
+.glitch-text {
+  position: relative;
+  animation: glitch-skew 1s infinite linear alternate-reverse;
+}
+
+@keyframes glitch-skew {
+  0% {
+    transform: skew(0deg);
+  }
+  100% {
+    transform: skew(-2deg);
+  }
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+  .ticket-container {
+    transform: scale(0.8);
+  }
+}
+
+@media (max-width: 480px) {
+  .ticket-container {
+    transform: scale(0.7);
   }
 }

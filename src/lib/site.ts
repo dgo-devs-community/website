@@ -7,9 +7,8 @@ import {
   Github,
   Disc,
   Users,
-  Phone
+  Phone,
 } from "lucide-react";
-
 
 // Tipos para las redes sociales
 export interface SocialLink {
@@ -45,7 +44,7 @@ export interface Member {
 export const siteConfig = {
   name: "DgoTecHub Community",
   description: "La comunidad Tech líder y más grande de Durango.",
-  url: "https://www.dgotechub.com",
+  url: "https://www.dgotechub.org",
   logo: "/logo.webp",
   email: "¡Envíanos un DM en Instagram!",
   phone: "",
@@ -143,7 +142,6 @@ export const siteConfig = {
       },
     },
   ] as Member[],
-
 
   // Valores de la comunidad
   communityValues: [

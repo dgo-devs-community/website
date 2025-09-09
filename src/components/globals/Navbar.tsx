@@ -2,6 +2,7 @@ import Image from "next/image";
 import React from "react";
 import NavLink from "./NavLink";
 import Link from "next/link";
+import { shouldShowPartyInfo } from "@/lib/feature-flags";
 
 export default function Navbar() {
   const navItems = [
@@ -17,6 +18,15 @@ export default function Navbar() {
       path: "/events",
       text: "Eventos",
     },
+    // Only show tickets link if party info is enabled
+    ...(shouldShowPartyInfo()
+      ? [
+          {
+            path: "/tickets",
+            text: "Boletos",
+          },
+        ]
+      : []),
   ];
 
   return (
@@ -24,16 +34,16 @@ export default function Navbar() {
       <div className="md:max-w-6xl mx-auto px-4 md:px-0 py-2 flex justify-between items-center">
         <div className="flex items-center">
           <Link href={"/"}>
-          <Image
-            src="/logo.webp"
-            alt="Logo"
-            width={70}
-            height={70}
-            className="mr-2"
-          />
+            <Image
+              src="/logo.webp"
+              alt="Logo"
+              width={70}
+              height={70}
+              className="mr-2"
+            />
           </Link>
         </div>
-        <nav className="flex space-x-6 md:space-x-8">
+        <nav className="flex space-x-6 md:space-x-8 items-center">
           {navItems.map((item) => (
             <NavLink key={item.path} path={item.path} text={item.text} />
           ))}
