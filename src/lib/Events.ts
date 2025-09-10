@@ -15,46 +15,36 @@ export interface PastEvent extends UpcomingEvent {
 }
 
 // Datos de eventos en memoria
+// Para eventos futuros, dejo fijos los de coworking y club de conversación en inglés. 
 const eventsData = {
   upcomingEvents: [
     {
       id: 1,
       title: "Co-working Starbucks",
-      image: "/starbuckks.webp",
+      image: "/coworking/starbuckks.webp",
       location: "Starbucks Punto Cero DT",
-      date: "Todos los miércoles",
+      date: "Todos los miércoles, 9:30 am",
       description:
         "¿Trabajas en remoto? Sal de casa y vamonos a Starbucks a trabajar juntos.",
     },
-    /* Quitar el comment cuando se agregue la v5 de las lightning talks
-      {
+    {
       id: 2,
-      title: "Lightning Talks v4.0",
-      image: "/TalksV4.png",
+      title: "English conversation club",
+      image: "/events/english-club/temp-flyer.jpg",
+      location: "Nube Coffee Lounge",
+      date: "Wednesday September 10, 2025",
+      description:
+        "Practice your English, meet new people, and have fun!",
+    },
+    {
+      id: 3,
+      title: "Lightning Talks v6.0",
+      image: "/events/lightning/LT6-save-date.png",
       location: "1816 Coffee and brunch",
-      date: "25 de Junio, 2025",
+      date: "24 de Septiembre, 2025",
       description:
         "Ideas rápidas, impacto inmediato. Únete a nuestras charlas tecnológicas.",
     },
-    */
-    {
-      id: 3,
-      title: "Meet & Greet 4.0",
-      image: "/LogoFlatAzul.png",
-      location: "Por definir",
-      date: "18 de Julio, 2025",
-      description:
-        "Ambiente relajado. Conoce a otros miembros de la comunidad y disfruta de una bebida.",
-    },
-    {
-      id: 4,
-      title: "DgoTecHub Fest 2025",
-      image: "/LogoFlatAzul.png",
-      location: "Por definir",
-      date: "16 de Agosto, 2025",
-      description:
-        "Porque no todo es código, únete a nuestra fiesta. Dj, Norteño y algo más.",
-    }
   ],
   pastEvents: [
     {
@@ -66,7 +56,7 @@ const eventsData = {
         "¿Trabajas en remoto? Sal de casa y vamonos a Starbucks a trabajar juntos.",
       image: "/lightning-talks.jpg",
       slug: "networking-starbucks-vol-1",
-      gallery: [],
+      gallery: ["/events/coworking/starbuckks.webp", "/events/coworking/coworking.jpg"],
     },
     {
       id: 2,
@@ -76,29 +66,29 @@ const eventsData = {
       description:
         "El evento inaugural que dio vida a la comunidad DgoTecHub, donde se forjaron las primeras conexiones.",
       image: "/techmetuup.jpg",
-      slug: "tech-meetup-2023",
-      gallery: [],
+      slug: "tech-meetup-1",
+      gallery: ["/events/meet-n-greets/Meet&Greet1.jpg"],
     },
     {
       id: 3,
       title: "Meet & Greet 2.0",
-      location: "Cafe",
+      location: "Boscoffee",
       date: "10 de Enero, 2024",
       description:
         "Un segundo encuentro que celebró el crecimiento de la comunidad, con más participantes y entusiasmo.",
-      image: "/LightningTalks1.jpg",
-      slug: "tech-meetup-2023",
-      gallery: ["LightningTalks1.jpg", "LightningTalks2.jpg"],
+      image: "/events/meet-n-greets/meet-greet2.jpg",
+      slug: "meet-greet-2",
+      gallery: ["/events/meet-n-greets/meet-greet2.jpg",],
     },
     {
       id: 4,
       title: "Meet & Greet 3.0",
-      location: "Cafe",
+      location: "Bruné Café",
       date: "10 de Febrero, 2024",
       description:
         "La tercera edición que reafirmó el compromiso de la comunidad por el aprendizaje y la colaboración.",
       image: "/mg1.jpg",
-      slug: "tech-meetup-2023",
+      slug: "meet-greet-3",
       gallery: [],
     },
     {
@@ -108,9 +98,9 @@ const eventsData = {
       date: "27 de Noviembre, 2024",
       description:
         "Un evento de charlas rápidas que inspiró a muchos a compartir sus conocimientos y experiencias.",
-      image: "/conference.jpg",
+      image: "/events/lightning/conference.jpg",
       slug: "charla-desarrollo-web-moderno",
-      gallery: [],
+      gallery: ["/events/lightning/conference.jpg", "/events/lightning/LT1-asistentes.jpg"],
     },
     {
       id: 6,
@@ -119,9 +109,9 @@ const eventsData = {
       date: "5 de Marzo, 2025",
       description:
         "Un enfoque en el desarrollo de habilidades blandas, cruciales para el éxito profesional.",
-      image: "/lt3.jpg",
-      slug: "charla-desarrollo-web-moderno",
-      gallery: [],
+      image: "/events/lightning/LightningTalks1.jpg",
+      slug: "charlas-segunda-edicion",
+      gallery: ["/events/lightning/LightningTalks1.jpg", "/events/lightning/lightning-talks.jpg", "/events/lightning/lt3.jpg"],
     },
     {
       id: 7,
@@ -130,9 +120,9 @@ const eventsData = {
       date: "30 de Abril, 2025",
       description:
         "Desde el impacto de la calidad del software, pasando por la influencia femenina en el mundo tech, hasta la importancia de hacer que el código se sienta humano",
-      image: "/TalksV3-2.webp",
+      image: "/events/lightning/TalksV3-2.webp",
       slug: "charlas-tercera-edicion",
-      gallery: [],
+      gallery: ["/events/lightning/TalksV3-2.webp"],
     },
     {
       id: 8,
@@ -141,10 +131,58 @@ const eventsData = {
       date: "25 de Junio, 2025",
       description:
         "Tres charlas, una misión: entender como el juego, la estrategia y el proceso dan forma al desarrollo de talento y software en la era digital.",
-      image: "/LT4-portada-evento.webp",
-      slug: "charlas-tercera-edicion",
+      image: "/events/lightning/LT4-portada-evento.webp",
+      slug: "charlas-cuarta-edicion",
+      gallery: ["/events/lightning/LT4-portada-evento.webp", "/events/lightning/LT4-participant.jpg"],
+    },
+    {
+      id: 9,
+      title: "Meet & Greet 4.0",
+      location: "1816 Coffee and brunch",
+      date: "18 de Julio, 2025",
+      description:
+        "Ambiente relajado, conoce a los miembros de la comunidad. Café o cerveza, lo que tu prefieras.",
+      image: "/LogoFlatAzul.png",
+      slug: "meet-greet-4",
       gallery: [],
     },
+    {
+      id: 10,
+      title: "Lightning Talks Vol. 5: Aprender, crear y protegerse en la era digital",
+      location: "1816 Coffee and brunch",
+      date: "30 de Julio, 2025",
+      description:
+        "De estrategias para aprender mejor, a los secretos de la IA, pasando por programar sin programar y la seguridad web. Una edición que mezcla curiosidad, técnica y experiencias reales para inspirarte.",
+      image: "/events/lightning/lt5-flyer.png",
+      slug: "charlas-quinta-edicion",
+      gallery: ["/events/lightning/lt5-flyer.png", "/events/lightning/LT5-participantes.jpg"],
+    },
+    {
+      id: 11,
+      title: "Taller: Impuestos para Vibe Coders y Greybeards",
+      location: "1816 Coffee and brunch",
+      date: "27 de Agosto, 2025",
+      description:
+        "¿Trabajas de  manera remota? ¿Eres freelance y no sabes cómo debes pagar tus impuestos? El taller 'Impuestos para Vibe Coders' es para tí!",
+      image: "/events/taxes/Flyer-Tax.jpg",
+      slug: "taller-impuestos-primera-edicion",
+      gallery: ["/events/taxes/Flyer-Tax.jpg", "/events/taxes/tax-participant.jpg"],
+    },
+    // When adding new entries to the past events use the following template. Remember to increase by 1 the id, and update the slug and image.
+    // Suggestions: look at previous events for clues of slug, desciption and images location, e.g. lightning talks 
+    /* 
+    {
+      id: 12,
+      title: "Event title",
+      location: "Event location",
+      date: "Event date",
+      description:
+        "Event description",
+      image: "/event-image.webp",
+      slug: "event-slug",
+      gallery: [],
+    }
+    */
   ],
 };
 
