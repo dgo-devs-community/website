@@ -101,7 +101,7 @@ export default function CommunityPage() {
             asChild
           >
             <Link href={"https://discord.gg/G4RsQJwuP8"} target="_blank">
-              Unetenos ahora
+              Únete ahora
             </Link>
           </Button>
         </div>
