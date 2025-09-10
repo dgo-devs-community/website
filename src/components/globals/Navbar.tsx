@@ -18,6 +18,10 @@ export default function Navbar() {
       path: "/events",
       text: "Eventos",
     },
+    {
+      path: "/directorio",
+      text: "Directorio",
+    },
     // Only show tickets link if party info is enabled
     ...(shouldShowPartyInfo()
       ? [
