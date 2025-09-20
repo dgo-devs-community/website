@@ -26,6 +26,8 @@ export default async function EventsPage() {
                 description={event.description}
                 location={event.location}
                 date={event.date}
+                formUrl={event.formUrl}
+                type={event.type}
               />
             ))}
         </div>
