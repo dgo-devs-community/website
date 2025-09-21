@@ -18,10 +18,10 @@ const nextConfig: NextConfig = {
         pathname: "/**",
       },
       {
-        protocol: "http",
-        hostname: "localhost",
-        port: "1337",
-        pathname: "/uploads/**",
+        protocol: "https",
+        hostname: "strapi.ipstests.ovh",
+        port: "",
+        pathname: "/**",  // Changed from "/uploads/**" to "/**" to handle any path
       },
     ],
   },
