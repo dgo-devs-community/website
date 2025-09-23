@@ -7,7 +7,7 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { MapPin, ChevronRight } from "lucide-react";
-import { getUpcomingEvents } from "@/lib/Events";
+import { getHomePageEvents } from "@/lib/Events";
 
 interface UpcomingEventsProps {
   limit?: number;
@@ -16,7 +16,8 @@ interface UpcomingEventsProps {
 export default async function UpcomingEvents({
   limit = 3,
 }: UpcomingEventsProps) {
-  const upcomingEvents = await getUpcomingEvents(limit);
+  const { upcomingEvents } = await getHomePageEvents();
+  const limitedUpcomingEvents = upcomingEvents.slice(0, limit);
 
   return (
     <section className="bg-white p-6 md:bg-gray-50 md:p-8 md:rounded-lg md:sticky md:top-24">
@@ -32,7 +33,7 @@ export default async function UpcomingEvents({
       </div>
 
       <div className="space-y-4">
-        {upcomingEvents.map((event) => (
+        {limitedUpcomingEvents.map((event) => (
           <Card key={event.id} className="border-gray-200 md:shadow-sm">
             <CardHeader className="pb-2">
               <h3 className="font-medium md:text-lg">{event.title}</h3>

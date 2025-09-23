@@ -2,8 +2,9 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import React from "react";
-import { getPastEventBySlug } from "@/lib/Events";
+import { getEventBySlug } from "@/lib/Events";
 import Image from "next/image";
+import DynamicZoneRenderer from "@/components/dynamic-zone/DynamicZoneRenderer";
 
 interface EventGalleryProps {
   params: Promise<{ slug: string }>;
@@ -11,13 +12,21 @@ interface EventGalleryProps {
 
 export default async function EventGallery({ params }: EventGalleryProps) {
   const { slug } = await params;
-  const event = await getPastEventBySlug(slug);
-
+  const event = await getEventBySlug(slug);
+  console.log(event);
   if (!event) {
     return (
-      <>
-        <h1>Evento no encontrado</h1>
-      </>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-800 mb-4">Evento no encontrado</h1>
+          <p className="text-gray-600 mb-6">Lo sentimos, no pudimos encontrar el evento que estás buscando.</p>
+          <Button asChild>
+            <Link href="/pastevents">
+              Volver a eventos pasados
+            </Link>
+          </Button>
+        </div>
+      </div>
     );
   }
 
@@ -43,40 +52,24 @@ export default async function EventGallery({ params }: EventGalleryProps) {
           </p>
         </div>
       </div>
-
+      {/* Dynamic Zone Renderer */}
       <div className="max-w-6xl mx-auto py-12 px-4 md:px-0">
-        <div className="mb-8">
-          <h2 className="text-xl">Acerca del evento</h2>
-          <p className="text-gray-700 md:text-lg">{event.description}</p>
-        </div>
 
-        <h2 className="text-xl md:text-2xl font-bold mb-6">
-          Galería de imágenes
-        </h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {event.gallery.length < 1 ? (
-            <div className="bg-gray-100 p-4 rounded-lg">
-              <h3 className="text-lg font-bold">Sin imágenes</h3>
-              <div className="h-32" />
-              <p>Se nos fue la mano con la fiesta y no tomamos fotos 😅</p>
+        {event.BlogEvento && event.BlogEvento.length > 0 ? (
+          <DynamicZoneRenderer content={event.BlogEvento} />
+        ) : (
+          <>
+            <div className="mb-8">
+              <h2 className="text-xl font-bold mb-4">Acerca del evento</h2>
+              <p className="text-gray-700 md:text-lg">{event.description}</p>
             </div>
-          ) : (
-            event.gallery.map((image, index) => (
-              <div
-                key={index}
-                className="relative aspect-video rounded-lg overflow-hidden shadow-xs hover:shadow-md transition-shadow border border-gray-300"
-              >
-                <Image
-                  src={image}
-                  alt={event.title}
-                  fill
-                  className="object-cover "
-                />
-              </div>
-            ))
-          )}
-        </div>
+
+            <div className="bg-gray-100 p-6 rounded-lg">
+              <h3 className="text-lg font-bold mb-2">Sin galería disponible</h3>
+              <p className="text-gray-600">No hay imágenes disponibles para este evento.</p>
+            </div>
+          </>
+        )}
       </div>
     </>
   );

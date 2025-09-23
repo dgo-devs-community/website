@@ -1,7 +1,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { getPastEvents } from "@/lib/Events";
+import { getHomePageEvents } from "@/lib/Events";
 import { ChevronRight } from "lucide-react";
 import PastEventsCard from "../pastevents/PastEventsCard";
 
@@ -10,7 +10,8 @@ interface PastEventsProps {
 }
 
 export default async function PastEvents({ limit = 2 }: PastEventsProps) {
-  const pastEvents = await getPastEvents(limit);
+  const { pastEvents } = await getHomePageEvents();
+  const limitedPastEvents = pastEvents.slice(0, limit);
 
   return (
     <section className="bg-white p-6 md:p-0 md:mb-12">
@@ -19,7 +20,7 @@ export default async function PastEvents({ limit = 2 }: PastEventsProps) {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-4 mb-4 md:mb-6">
-        {pastEvents.map((event) => (
+        {limitedPastEvents.map((event) => (
           <PastEventsCard
             key={event.id}
             image={event.image}

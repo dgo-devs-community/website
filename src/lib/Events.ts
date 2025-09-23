@@ -1,122 +1,124 @@
-const apiUrl = process.env.PUBLIC_STRAPI_API_URL;
-const apiToken = process.env.STRAPI_API_TOKEN;
+import client from './strapi-api-client';
+import type {
+  StrapiMedia,
+  StrapiEvent,
+  UpcomingEvent,
+  PastEvent,
+  DynamicZone,
+  DynamicZoneComponent,
+  RichTextComponent,
+  ImageGalleryComponent,
+  QuoteComponent,
+  VideoEmbedComponent
+} from '../types/event.types';
 
-// Interface for the raw event data from Strapi
-export interface StrapiEvent {
-  id: number;
-  Titulo: string;
-  slug: string;
-  Recurrente: boolean;
-  FechaRecurrente: string;
-  Fecha: string;
-  Lugar: string;
-  Descripcion: string;
-  Banner?: {
-    url: string;
-  };
-  Tipo?: string;
-  Formulario?: string;
-}
+const strapiUrl = process.env.PUBLIC_STRAPI_API_URL;
 
-// Defines the types for our events
-export interface UpcomingEvent {
-  id: number;
-  image: string;
-  title: string;
-  location: string;
-  date: string;
-  description: string;
-  type?: string;
-  formUrl?: string;
-}
-
-export interface PastEvent extends UpcomingEvent {
-  gallery: string[]; // Array of image URLs for the gallery
-  slug: string; // User-friendly URL for the event
-}
-
-// In-memory cache for events to avoid repeated API calls
-let cachedEvents: { upcomingEvents: UpcomingEvent[]; pastEvents: PastEvent[] } | null = null;
-
-export async function getEvents(): Promise<{ upcomingEvents: UpcomingEvent[]; pastEvents: PastEvent[] }> {
-  if (cachedEvents) {
-    return cachedEvents;
-  }
-
+export async function getHomePageEvents(): Promise<{ upcomingEvents: UpcomingEvent[]; pastEvents: PastEvent[] }> {
   try {
-    const response = await fetch(`${apiUrl}/api/eventos?populate=*&sort=Fecha:asc`, {
-      headers: {
-        Authorization: `Bearer ${apiToken}`,
+    const { data: events } = await client.collection('eventos').find({
+      fields: ['Titulo', 'Descripcion', 'Fecha', 'Lugar', 'Formulario', 'Recurrente', 'slug'],
+      populate: {
+        Banner: true,
       },
+      sort: ['Fecha:desc'],
     });
 
-    if (!response.ok) {
-      throw new Error(`Failed to fetch events from Strapi: ${response.statusText}`);
+    if (!events) {
+      console.error('Error fetching events: ');
+      return { upcomingEvents: [], pastEvents: [] };
     }
-
-    const { data }: { data: StrapiEvent[] } = await response.json();
 
     const upcomingEvents: UpcomingEvent[] = [];
     const pastEvents: PastEvent[] = [];
-    const now = new Date();
+    const now = Date.now();
 
-    for (const event of data) {
-      const attributes = event;
+    for (const event of events) {
+      const isRecurring = event.Recurrente;
+      const isUpcoming = isRecurring || new Date(event.Fecha).getTime() >= now;
 
-      const formattedEvent: UpcomingEvent = {
+      const baseEvent = {
         id: event.id,
-        title: attributes.Titulo,
-        location: attributes.Lugar,
-        date: attributes.Recurrente
-          ? attributes.FechaRecurrente
-          : new Date(attributes.Fecha).toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' }),
-        description: attributes.Descripcion,
-        image: attributes.Banner?.url
-          ? attributes.Banner.url.startsWith('http')
-            ? attributes.Banner.url
-            : `${apiUrl}${attributes.Banner.url}`
-          : "/LogoFlatAzul.png", // Fallback for events without a banner
-        type: attributes.Tipo,
-        formUrl: attributes.Formulario,
-      };
+      title: event.Titulo,
+      location: event.Lugar,
+      date: event.Recurrente ? event.FechaRecurrente
+      : new Date(event.Fecha).toLocaleDateString('es-MX', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      }),
+      description: event.Descripcion,
+      type: event.Tipo,
+      formUrl: event.Formulario,
+      image: `${strapiUrl}${event.Banner.url}` || "/LogoFlatAzul.png"
+    };
 
-      if (attributes.Recurrente) {
-        upcomingEvents.push(formattedEvent);
-      } else {
-        const eventDate = new Date(attributes.Fecha);
-        const today = new Date();
-        today.setHours(0, 0, 0, 0); // Set to the beginning of the day
-
-        if (eventDate >= today) {
-          upcomingEvents.push(formattedEvent);
-        } else {
-          pastEvents.push({ ...formattedEvent, slug: attributes.slug, gallery: [] });
-        }
-      }
+    if (isUpcoming) {
+      upcomingEvents.push(baseEvent);
+    } else {
+      pastEvents.push({ ...baseEvent, slug: event.slug });
     }
+  }
 
-    cachedEvents = { upcomingEvents, pastEvents };
-    return cachedEvents;
+  return { upcomingEvents, pastEvents: pastEvents.slice(0, 2)};
 
   } catch (error) {
-    console.error("Error fetching or processing events:", error);
-    // Return empty arrays as a fallback to prevent crashes
-    return { upcomingEvents: [], pastEvents: [] };
+  console.error('Error in getHomePageEvents:', error);
+  return { upcomingEvents: [], pastEvents: [] };
   }
 }
 
-export async function getUpcomingEvents(limit?: number) {
-  const data = await getEvents();
-  return limit ? data.upcomingEvents.slice(0, limit) : data.upcomingEvents;
-}
+export async function getEventBySlug(slug: string): Promise<PastEvent | null> {
+  try {
+    const { data: events } = await client.collection('eventos').find({
+      filters: { slug: { $eq: slug } },
+      populate: {
+        Banner: { populate: '*' },
+        BlogEvento: {
+          populate: {
+            // This populates the 'galeria-de-imagenes' component
+            'eventos.galeria-de-imagenes': {
+              populate: {
+                // This populates the 'images' relation within that component
+                images: {
+                  // This is the key: populate all fields of the image, including 'formats'
+                  fields: ['url', 'name', 'alternativeText', 'caption', 'formats']
+                }
+              }
+            },
+            'eventos.video': { populate: '*' },
+            'eventos.post-evento': { populate: '*' },
+            'eventos.hero-image': { populate: '*' },
+          }
+        }
+      }
+    });
 
-export async function getPastEvents(limit?: number) {
-  const data = await getEvents();
-  const reversedPastEvents = [...data.pastEvents].reverse();
-  return limit ? reversedPastEvents.slice(0, limit) : reversedPastEvents;
-}
 
-export async function getPastEventBySlug(slug: string) {
-  const data = await getEvents();
-  return data.pastEvents.find((event) => event.slug === slug);
+    if (!events || events.length === 0) {
+      console.error('Error fetching event by slug: ');
+      return null;
+    }
+
+    const event = events[0];
+
+    const formattedEvent = {
+      id: event.id,
+      title: event.Titulo || 'Sin titulo',
+      location: event.Lugar || 'Sin lugar',
+      date: event.Fecha || 'Sin fecha',
+      description: event.Descripcion || 'Sin descripcion',
+      type: event.Tipo || 'Sin tipo',
+      formUrl: event.Formulario || 'Sin formulario',
+      image: event.Banner?.url || '/LogoFlatAzul.png',
+      slug: event.slug || 'Sin slug',
+      BlogEvento: event.BlogEvento
+    };
+
+    return formattedEvent;
+
+  } catch (error) {
+    console.error(`Error fetching event with slug ${slug}:`, error);
+    return null;
+    }
 }
