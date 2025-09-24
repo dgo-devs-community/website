@@ -53,9 +53,11 @@ export async function getHomePageEvents(): Promise<{
         description: event.Descripcion,
         type: event.Tipo,
         formUrl: event.Formulario,
-        image: `${strapiUrl}${event.Banner.url}` || "/LogoFlatAzul.png",
+        image: event.Banner?.url
+          ? `${strapiUrl}${event.Banner.url}`
+          : "/LogoFlatAzul.png",
       };
-
+      console.log(baseEvent.image);
       if (isUpcoming) {
         upcomingEvents.push(baseEvent);
       } else {
