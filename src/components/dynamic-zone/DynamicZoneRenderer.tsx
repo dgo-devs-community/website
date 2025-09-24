@@ -27,16 +27,11 @@ export default function DynamicZoneRenderer({
               />
             );
           case "eventos.galeria-de-imagenes":
-            console.log("Gallery component data:", component);
             // Handle Gallery array from actual API structure
             const galleryImages = component.Gallery || [];
-            console.log("Processed gallery images:", galleryImages);
 
             return (
               <div key={component.id || index} className="my-8">
-                <h3 className="text-xl font-bold mb-4">
-                  {component.title || "Galería de imágenes"}
-                </h3>
                 <ImageGallery
                   images={galleryImages}
                   title={component.title || "Galería de imágenes"}

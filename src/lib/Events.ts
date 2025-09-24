@@ -45,10 +45,13 @@ export async function getHomePageEvents(): Promise<{
         location: event.Lugar,
         date: event.Recurrente
           ? event.FechaRecurrente
-          : new Date(event.Fecha).toLocaleDateString("es-MX", {
+          : new Date(event.Fecha).toLocaleString("es-MX", {
               year: "numeric",
               month: "long",
               day: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+              hour12: true,
             }),
         description: event.Descripcion,
         type: event.Tipo,
@@ -57,7 +60,7 @@ export async function getHomePageEvents(): Promise<{
           ? `${strapiUrl}${event.Banner.url}`
           : "/LogoFlatAzul.png",
       };
-      console.log(baseEvent.image);
+
       if (isUpcoming) {
         upcomingEvents.push(baseEvent);
       } else {
@@ -156,10 +159,13 @@ export async function getEventBySlug(slug: string): Promise<PastEvent | null> {
       title: event.Titulo || "Sin titulo",
       location: event.Lugar || "Sin lugar",
       date:
-        new Date(event.Fecha).toLocaleDateString("es-MX", {
+        new Date(event.Fecha).toLocaleString("es-MX", {
           year: "numeric",
           month: "long",
           day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: true,
         }) || "Sin fecha",
       description: event.Descripcion || "Sin descripcion",
       type: event.Tipo || "Sin tipo",

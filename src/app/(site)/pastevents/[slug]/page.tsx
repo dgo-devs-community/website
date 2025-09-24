@@ -12,7 +12,7 @@ interface EventGalleryProps {
 export default async function EventGallery({ params }: EventGalleryProps) {
   const { slug } = await params;
   const event = await getEventBySlug(slug);
-  console.log(event);
+
   if (!event) {
     return (
       <div className="min-h-screen flex items-center justify-center">
