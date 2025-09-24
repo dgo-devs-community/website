@@ -3,7 +3,6 @@ import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import { getEventBySlug } from "@/lib/Events";
-import Image from "next/image";
 import DynamicZoneRenderer from "@/components/dynamic-zone/DynamicZoneRenderer";
 
 interface EventGalleryProps {
@@ -18,12 +17,14 @@ export default async function EventGallery({ params }: EventGalleryProps) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4">Evento no encontrado</h1>
-          <p className="text-gray-600 mb-6">Lo sentimos, no pudimos encontrar el evento que estás buscando.</p>
+          <h1 className="text-2xl font-bold text-gray-800 mb-4">
+            Evento no encontrado
+          </h1>
+          <p className="text-gray-600 mb-6">
+            Lo sentimos, no pudimos encontrar el evento que estás buscando.
+          </p>
           <Button asChild>
-            <Link href="/pastevents">
-              Volver a eventos pasados
-            </Link>
+            <Link href="/pastevents">Volver a eventos pasados</Link>
           </Button>
         </div>
       </div>
@@ -54,7 +55,6 @@ export default async function EventGallery({ params }: EventGalleryProps) {
       </div>
       {/* Dynamic Zone Renderer */}
       <div className="max-w-6xl mx-auto py-12 px-4 md:px-0">
-
         {event.BlogEvento && event.BlogEvento.length > 0 ? (
           <DynamicZoneRenderer content={event.BlogEvento} />
         ) : (
@@ -66,7 +66,9 @@ export default async function EventGallery({ params }: EventGalleryProps) {
 
             <div className="bg-gray-100 p-6 rounded-lg">
               <h3 className="text-lg font-bold mb-2">Sin galería disponible</h3>
-              <p className="text-gray-600">No hay imágenes disponibles para este evento.</p>
+              <p className="text-gray-600">
+                Se nos fue la mano con la fiesta y no tomamos fotos 😅
+              </p>
             </div>
           </>
         )}

@@ -333,3 +333,26 @@
   max-width: 100%;
   height: auto;
 }
+
+/* Enhanced list styling for prose content */
+.prose ul {
+  list-style-type: disc;
+}
+
+.prose ol {
+  list-style-type: decimal;
+}
+
+.prose ul li,
+.prose ol li {
+  display: list-item;
+  list-style: inherit;
+}
+
+.prose ul ul {
+  list-style-type: circle;
+}
+
+.prose ul ul ul {
+  list-style-type: square;
+}

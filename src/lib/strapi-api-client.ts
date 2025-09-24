@@ -1,14 +1,14 @@
-import { strapi } from '@strapi/client';
-
+import { strapi } from "@strapi/client";
+import { env } from "@/env";
 const headers: Record<string, string> = {
-  'Content-Type': 'application/json',
+  "Content-Type": "application/json",
 };
 
-if (process.env.STRAPI_API_TOKEN) {
-  headers['Authorization'] = `Bearer ${process.env.STRAPI_API_TOKEN}`;
+if (env.STRAPI_API_TOKEN) {
+  headers["Authorization"] = `Bearer ${env.STRAPI_API_TOKEN}`;
 }
 
-const baseURL = `${process.env.PUBLIC_STRAPI_API_URL}/api`;
+const baseURL = `${env.STRAPI_API_URL}/api`;
 
 const client = strapi({
   baseURL,

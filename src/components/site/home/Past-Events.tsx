@@ -1,4 +1,3 @@
-
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { getHomePageEvents } from "@/lib/Events";
@@ -29,6 +28,7 @@ export default async function PastEvents({ limit = 2 }: PastEventsProps) {
             location={event.location}
             slug={event.slug}
             date={event.date}
+            type={event.type}
           />
         ))}
       </div>

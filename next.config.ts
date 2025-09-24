@@ -23,6 +23,12 @@ const nextConfig: NextConfig = {
         port: "",
         pathname: "/**",  // Changed from "/uploads/**" to "/**" to handle any path
       },
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "1337",
+        pathname: "/**",  // Changed from "/uploads/**" to "/**" to handle any path
+      },
     ],
   },
 };

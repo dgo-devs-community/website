@@ -21,20 +21,18 @@ export default function ImageGallery({
       </div>
     );
   }
-  const strapiUrl = process.env.PUBLIC_STRAPI_API_URL;
   return (
     <div className={`space-y-4 ${className}`}>
       {title && <h2 className="text-2xl font-bold">{title}</h2>}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {images.map((image) => {
           // Use the largest available format or fallback to the original
-          const src = image.formats?.large?.url || 
-                     image.formats?.medium?.url || 
-                     image.formats?.small?.url || 
-                     image.formats?.thumbnail?.url || 
-                     image.url;
-
-          const finalSrc = src.startsWith('http') ? src : `${strapiUrl}${src}`;
+          // URLs should already be absolute from the API processing
+          const finalSrc = image.formats?.large?.url || 
+                          image.formats?.medium?.url || 
+                          image.formats?.small?.url || 
+                          image.formats?.thumbnail?.url || 
+                          image.url;
           
           return (
             <div

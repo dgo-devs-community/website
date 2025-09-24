@@ -22,7 +22,7 @@ interface Block {
   newTab?: boolean;
   language?: string;
   code?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 interface RichTextProps {
@@ -57,7 +57,6 @@ function RichText({ content, className = '' }: RichTextProps) {
           href={node.url} 
           target={node.newTab ? "_blank" : "_self"} 
           rel={node.newTab ? "noopener noreferrer" : undefined}
-          className="text-blue-600 hover:underline"
         >
           {element}
         </a>
@@ -83,21 +82,20 @@ function RichText({ content, className = '' }: RichTextProps) {
         return React.createElement(
           HeadingTag, 
           { 
-            key: index, 
-            className: `heading-${level} mt-6 mb-4 font-bold` 
+            key: index
           }, 
           ...children
         );
 
       case 'paragraph':
-        return <p key={index} className="mb-4">{children}</p>;
+        return <p key={index}>{children}</p>;
 
       case 'blockquote':
-        return <blockquote key={index} className="border-l-4 border-gray-300 pl-4 italic my-4">{children}</blockquote>;
+        return <blockquote key={index} className="border-l-4 border-gray-300 pl-4 italic">{children}</blockquote>;
 
       case 'code':
         return (
-          <pre key={index} className="bg-gray-100 p-4 rounded-lg overflow-x-auto my-4">
+          <pre key={index} className="bg-gray-100 p-4 rounded-lg overflow-x-auto">
             <code className={`language-${block.language || 'text'}`}>
               {block.code || children}
             </code>
@@ -111,7 +109,6 @@ function RichText({ content, className = '' }: RichTextProps) {
             href={block.url}
             target={block.newTab ? "_blank" : "_self"}
             rel={block.newTab ? "noopener noreferrer" : undefined}
-            className="text-blue-600 hover:underline"
           >
             {children}
           </a>
@@ -123,25 +120,23 @@ function RichText({ content, className = '' }: RichTextProps) {
         return React.createElement(
           ListTag,
           {
-            key: index,
-            className: `list-${block.format} ml-4 my-4`,
-            style: isOrdered ? { listStyleType: 'decimal' } : { listStyleType: 'disc' }
+            key: index
           },
           ...children
         );
 
       case 'list-item':
-        return <li key={index} className="mb-1">{children}</li>;
+        return <li key={index}>{children}</li>;
 
       // Add more block types as needed
       default:
         console.warn(`Unhandled block type: ${block.type}`, block);
-        return <div key={index} className="my-2">{children}</div>;
+        return <div key={index}>{children}</div>;
     }
   };
 
   return (
-    <div className={`rich-text ${className}`}>
+    <div className={`prose max-w-none ${className}`}>
       {blocks.map((block, index) => renderNode(block, index))}
     </div>
   );

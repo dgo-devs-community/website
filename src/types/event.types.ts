@@ -13,6 +13,19 @@ export interface StrapiMedia {
   };
 }
 
+// Rich text block interfaces for Strapi rich text editor
+export interface RichTextBlock {
+  type: string;
+  children?: (TextNode | RichTextBlock)[];
+  level?: number;
+  format?: string;
+  url?: string;
+  newTab?: boolean;
+  language?: string;
+  code?: string;
+  [key: string]: unknown;
+}
+
 export interface TextNode {
   type: 'text';
   text: string;
@@ -46,12 +59,13 @@ export interface DynamicZoneComponent {
 
 export interface RichTextComponent extends DynamicZoneComponent {
   __component: 'eventos.post-evento';
-  content: string;
+  Texto: RichTextBlock[];
 }
 
 export interface ImageGalleryComponent extends DynamicZoneComponent {
   __component: 'eventos.galeria-de-imagenes';
-  images: StrapiMedia[];
+  Gallery: StrapiMedia[];
+  title?: string;
 }
 
 export interface QuoteComponent extends DynamicZoneComponent {
@@ -62,7 +76,10 @@ export interface QuoteComponent extends DynamicZoneComponent {
 
 export interface VideoEmbedComponent extends DynamicZoneComponent {
   __component: 'eventos.video';
-  url: string;
+  Video: {
+    url: string;
+    oembed?: unknown;
+  };
   caption?: string;
 }
 
@@ -102,4 +119,5 @@ export interface UpcomingEvent {
 
 export interface PastEvent extends UpcomingEvent {
   slug: string;
+  BlogEvento?: DynamicZone[];
 }
