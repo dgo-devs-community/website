@@ -21,7 +21,7 @@ const eventsData = {
     {
       id: 1,
       title: "Co-working Starbucks",
-      image: "/coworking/starbuckks.webp",
+      image: "/events/coworking/starbuckks.webp",
       location: "Starbucks Punto Cero DT",
       date: "Todos los miércoles, 9:30 am",
       description:
@@ -54,7 +54,7 @@ const eventsData = {
       date: "Todos los miércoles",
       description:
         "¿Trabajas en remoto? Sal de casa y vamonos a Starbucks a trabajar juntos.",
-      image: "/lightning-talks.jpg",
+      image: "/events/coworking/starbuckks.webp",
       slug: "networking-starbucks-vol-1",
       gallery: ["/events/coworking/starbuckks.webp", "/events/coworking/coworking.jpg"],
     },
