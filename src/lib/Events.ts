@@ -31,19 +31,10 @@ const eventsData = {
       id: 2,
       title: "English conversation club",
       image: "/events/english-club/temp-flyer.jpg",
-      location: "Nube Coffee Lounge",
-      date: "Wednesday September 10, 2025",
+      location: "Cha Cha Cenizo",
+      date: "Wednesday October 1, 2025. 8:15 pm",
       description:
         "Practice your English, meet new people, and have fun!",
-    },
-    {
-      id: 3,
-      title: "Lightning Talks v6.0",
-      image: "/events/lightning/LT6-save-date.png",
-      location: "1816 Coffee and brunch",
-      date: "24 de Septiembre, 2025",
-      description:
-        "Ideas rápidas, impacto inmediato. Únete a nuestras charlas tecnológicas.",
     },
   ],
   pastEvents: [
@@ -167,6 +158,17 @@ const eventsData = {
       image: "/events/taxes/Flyer-Tax.jpg",
       slug: "taller-impuestos-primera-edicion",
       gallery: ["/events/taxes/Flyer-Tax.jpg", "/events/taxes/tax-participant.jpg"],
+    },
+    {
+      id: 12,
+      title: "Lightning Talks v6.0",
+      image: "/events/lightning/LT6-save-date.png",
+      location: "1816 Coffee and brunch",
+      date: "24 de Septiembre, 2025",
+      description:
+        "En la v6 de nuestras lightning talks hablamos de cómo llegar a Silicon Valley, iniciar en ServiceNow, crear campañas con Meta Ads y aprovechar la deuda técnica en tus proyectos. ¡Conocimiento práctico en solo minutos!",
+      slug: "lightning-talks-v6",
+      gallery: [],
     },
     // When adding new entries to the past events use the following template. Remember to increase by 1 the id, and update the slug and image.
     // Suggestions: look at previous events for clues of slug, desciption and images location, e.g. lightning talks 
