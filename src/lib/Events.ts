@@ -110,6 +110,7 @@ export async function getEventBySlug(slug: string): Promise<PastEvent | null> {
 
     const event = events[0];
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const populatedBlogEvento = event.BlogEvento?.map((component: any) => {
       if (
         component.__component === "eventos.galeria-de-imagenes" &&
@@ -117,38 +118,41 @@ export async function getEventBySlug(slug: string): Promise<PastEvent | null> {
       ) {
         return {
           ...component,
-          Gallery: component.Gallery.map((image: any) => ({
-            ...image,
-            url: `${strapiUrl}${image.url}`,
-            formats: image.formats
-              ? {
-                  thumbnail: image.formats.thumbnail
-                    ? {
-                        ...image.formats.thumbnail,
-                        url: `${strapiUrl}${image.formats.thumbnail.url}`,
-                      }
-                    : undefined,
-                  small: image.formats.small
-                    ? {
-                        ...image.formats.small,
-                        url: `${strapiUrl}${image.formats.small.url}`,
-                      }
-                    : undefined,
-                  medium: image.formats.medium
-                    ? {
-                        ...image.formats.medium,
-                        url: `${strapiUrl}${image.formats.medium.url}`,
-                      }
-                    : undefined,
-                  large: image.formats.large
-                    ? {
-                        ...image.formats.large,
-                        url: `${strapiUrl}${image.formats.large.url}`,
-                      }
-                    : undefined,
-                }
-              : undefined,
-          })),
+          Gallery: component.Gallery.map(
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (image: { url: string; formats: any }) => ({
+              ...image,
+              url: `${strapiUrl}${image.url}`,
+              formats: image.formats
+                ? {
+                    thumbnail: image.formats.thumbnail
+                      ? {
+                          ...image.formats.thumbnail,
+                          url: `${strapiUrl}${image.formats.thumbnail.url}`,
+                        }
+                      : undefined,
+                    small: image.formats.small
+                      ? {
+                          ...image.formats.small,
+                          url: `${strapiUrl}${image.formats.small.url}`,
+                        }
+                      : undefined,
+                    medium: image.formats.medium
+                      ? {
+                          ...image.formats.medium,
+                          url: `${strapiUrl}${image.formats.medium.url}`,
+                        }
+                      : undefined,
+                    large: image.formats.large
+                      ? {
+                          ...image.formats.large,
+                          url: `${strapiUrl}${image.formats.large.url}`,
+                        }
+                      : undefined,
+                  }
+                : undefined,
+            })
+          ),
         };
       }
       return component;
