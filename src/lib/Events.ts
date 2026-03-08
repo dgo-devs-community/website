@@ -4,6 +4,9 @@ import type { UpcomingEvent, PastEvent } from "../types/event.types";
 
 const strapiUrl = env.STRAPI_API_URL;
 
+const toAbsoluteUrl = (url: string) =>
+  url.startsWith("http") ? url : `${strapiUrl}${url}`;
+
 export async function getHomePageEvents(): Promise<{
   upcomingEvents: UpcomingEvent[];
   pastEvents: PastEvent[];
@@ -57,7 +60,7 @@ export async function getHomePageEvents(): Promise<{
         type: event.Tipo,
         formUrl: event.Formulario,
         image: event.Banner?.url
-          ? `${strapiUrl}${event.Banner.url}`
+          ? toAbsoluteUrl(event.Banner.url)
           : "/LogoFlatAzul.png",
       };
 
@@ -122,31 +125,31 @@ export async function getEventBySlug(slug: string): Promise<PastEvent | null> {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (image: { url: string; formats: any }) => ({
               ...image,
-              url: `${strapiUrl}${image.url}`,
+              url: toAbsoluteUrl(image.url),
               formats: image.formats
                 ? {
                     thumbnail: image.formats.thumbnail
                       ? {
                           ...image.formats.thumbnail,
-                          url: `${strapiUrl}${image.formats.thumbnail.url}`,
+                          url: toAbsoluteUrl(image.formats.thumbnail.url),
                         }
                       : undefined,
                     small: image.formats.small
                       ? {
                           ...image.formats.small,
-                          url: `${strapiUrl}${image.formats.small.url}`,
+                          url: toAbsoluteUrl(image.formats.small.url),
                         }
                       : undefined,
                     medium: image.formats.medium
                       ? {
                           ...image.formats.medium,
-                          url: `${strapiUrl}${image.formats.medium.url}`,
+                          url: toAbsoluteUrl(image.formats.medium.url),
                         }
                       : undefined,
                     large: image.formats.large
                       ? {
                           ...image.formats.large,
-                          url: `${strapiUrl}${image.formats.large.url}`,
+                          url: toAbsoluteUrl(image.formats.large.url),
                         }
                       : undefined,
                   }
