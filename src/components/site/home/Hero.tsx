@@ -26,7 +26,7 @@ export default function Hero() {
             size="lg"
             asChild
           >
-            <Link href={"https://discord.gg/mn5X7gw7uy"} target="_blank">
+            <Link href={"https://discord.gg/mtENXTHjTn"} target="_blank">
               <span className="ml-2 ">Unete a nosotros</span>
             </Link>
           </Button>

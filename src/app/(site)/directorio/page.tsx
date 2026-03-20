@@ -41,6 +41,7 @@ export default function DirectorioPage() {
   }, [profiles, searchTerm, selectedCategory]);
 
   return (
+    <div className="min-h-screen bg-slate-50">
     <div className="max-w-7xl mx-auto px-2 sm:px-4 py-4 md:py-8">
       <section className="text-center py-6 sm:py-8 md:py-12 bg-white rounded-lg shadow-sm border border-slate-200 mx-2 sm:mx-0">
         <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-slate-800 px-2">Directorio de la Comunidad</h1>
@@ -93,6 +94,7 @@ export default function DirectorioPage() {
         )}
         </>
       )}
+    </div>
     </div>
   );
 }

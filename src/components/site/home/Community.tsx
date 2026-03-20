@@ -19,7 +19,7 @@ export default function Community() {
       </p>
       <div className="w-full flex justify-center md:justify-start">
         <Button className=" bg-[#2196f3] cursor-pointer hover:bg-blue-600 md:px-6 md:py-5 md:text-lg">
-          <Link target="_blank" href="https://discord.gg/G4RsQJwuP8">
+          <Link target="_blank" href="https://discord.gg/mtENXTHjTn">
             Registrarse ahora
           </Link>
         </Button>

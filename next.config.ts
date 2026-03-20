@@ -19,9 +19,9 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "strapi.ipstests.ovh",
+        hostname: "**.media.strapiapp.com",
         port: "",
-        pathname: "/**",  // Changed from "/uploads/**" to "/**" to handle any path
+        pathname: "/**",
       },
       {
         protocol: "http",

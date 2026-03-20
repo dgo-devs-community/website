@@ -100,7 +100,7 @@ export default function CommunityPage() {
             className="bg-white w-fit text-blue-900 hover:bg-gray-100 px-8 py-6 text-lg"
             asChild
           >
-            <Link href={"https://discord.gg/G4RsQJwuP8"} target="_blank">
+            <Link href={"https://discord.gg/mtENXTHjTn"} target="_blank">
               Únete ahora
             </Link>
           </Button>
